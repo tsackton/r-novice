@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Starting with data</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">Starting with data</h1>
+          
+<div id="learning-objectives" class="objectives">
+<h2>Learning Objectives</h2>
+<ul>
+<li>Introducing data frames</li>
+<li>Load in data (CSV files)</li>
+<li>Explore the structure and the content of the data in R</li>
+<li>Understand what are factors and how to manipulate them</li>
+</ul>
+</div>
+<h1 id="what-are-data-frames">What are data frames?</h1>
+<p><code>data.frame</code> is the <em>de facto</em> data structure for most tabular data and what we use for statistics and plotting.</p>
+<p>A <code>data.frame</code> is a collection of vectors of identical lengths. Each vector represents a column, and each vector can be of a different data type (e.g., characters, integers, factors). The <code>str()</code> function is useful to inspect the data types of the columns.</p>
+<p>A <code>data.frame</code> can be created by the functions <code>read.csv()</code> or <code>read.table()</code>, which can be used to import spreadsheets from your hard drive (or the web). As we see in the pull-down menu that appears after tab-completion there are a number of functions for loading in files. The <code>read.table</code> function requires the user to provide specific arguments whereas for <code>read.csv</code> this is set by default. <em>Note that <code>read.csv</code> can also accept other delimiter files simply by passing in the <code>sep</code> argument</em></p>
+<div id="note" class="callout">
+<h3>Note:</h3>
+<p>By default, <code>data.frame</code> converts (= coerces) columns that contain characters (i.e., text) into the <code>factor</code> data type. Depending on what you want to do with the data, you may want to keep these columns as <code>character</code>. To do so, <code>read.csv()</code> and <code>read.table()</code> have an argument called <code>stringsAsFactors</code> which can be set to <code>FALSE</code>.</p>
+</div>
+<h1 id="loading-in-files">Loading in files</h1>
+<p>We are studying two different celltypes in mice and want to evaluate how gene expression differs in WT versus Knockout (KO). The experimental design setup is stored as a <code>.csv</code> file: each row holds information for a single animal, and the columns represent <code>genotype</code>(WT or KO), <code>celltype</code> (typeA or typeB), and <code>replicate number</code>.</p>
+<p>To load in our metadata, we need to locate the <code>mouse_exp_design.csv</code> file. We will use <code>read.csv()</code> to load into memory (as a <code>data.frame</code>) the content of the CSV file. Using the same command function as our previous session, but <strong>this time we will assign it to a variable</strong>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">metadata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&#39;meta/mouse_exp_design.csv&#39;</span>)</code></pre>
+<p>This statement doesn't produce any output because assignment doesn't display anything. If we want to check that our data has been loaded, we can print the variable's value:</p>
+<pre class="sourceCode r"><code class="sourceCode r">metadata</code></pre>
+<pre><code>##          genotype celltype replicate
+## sample1        Wt    typeA         1
+## sample2        Wt    typeA         2
+## sample3        Wt    typeA         3
+## sample4        KO    typeA         1
+## sample5        KO    typeA         2
+## sample6        KO    typeA         3
+## sample7        Wt    typeB         1
+## sample8        Wt    typeB         2
+## sample9        Wt    typeB         3
+## sample10       KO    typeB         1
+## sample11       KO    typeB         2
+## sample12       KO    typeB         3</code></pre>
+<p><strong>At this point, make sure all participants have the data loaded</strong></p>
+<p>By default, using the <code>read.csv</code> function will load in the data and assign the first row of the table to be our <strong>column names</strong>. Additionally since our header has one less name than there are columns R automatically assigns the <strong>first column as row names</strong>. We can look at the values assigned for each by using <code>row.names</code> and <code>col.names</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(metadata)
+<span class="kw">colnames</span>(metadata)</code></pre>
+<div id="challenge" class="challenge">
+<h3>Challenge</h3>
+<p>We can change the default settings by adding in arguments when we read in the data by setting <code>header = FALSE</code>. Check to see how the dataframe has changed. What happens if we load in data using <code>read.table</code>?</p>
+</div>
+<p><strong>Load the data in again using default settings and <code>read.csv</code> to continue.</strong></p>
+<p>Suppose we had a larger file, we might not want to display all the contents in the console. Instead we could check the top (the first 6 lines) of this <code>data.frame</code> using the function <code>head()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(metadata)</code></pre>
+<p>Let's now check the <strong>str</strong>ucture of this <code>data.frame</code> in more details with the function <code>str()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(metadata)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    12 obs. of  3 variables:
+##  $ genotype : Factor w/ 2 levels &quot;KO&quot;,&quot;Wt&quot;: 2 2 2 1 1 1 2 2 2 1 ...
+##  $ celltype : Factor w/ 2 levels &quot;typeA&quot;,&quot;typeB&quot;: 1 1 1 1 1 1 2 2 2 2 ...
+##  $ replicate: int  1 2 3 1 2 3 1 2 3 1 ...</code></pre>
+<p><strong>You can also get this information from the &quot;Environment&quot; tab in RStudio.</strong></p>
+<h1 id="inspecting-data.frame-objects">Inspecting <code>data.frame</code> objects</h1>
+<p>We already saw how the functions <code>head()</code> and <code>str()</code> can be useful to check the content and the structure of a <code>data.frame</code>. Here is a non-exhaustive list of functions to get a sense of the content/structure of the data.</p>
+<ul>
+<li>Size:
+<ul>
+<li><code>dim()</code> - returns a vector with the number of rows in the first element, and the number of columns as the second element (the <strong>dim</strong>ensions of the object)</li>
+<li><code>nrow()</code> - returns the number of rows</li>
+<li><code>ncol()</code> - returns the number of columns</li>
+</ul></li>
+<li>Content:
+<ul>
+<li><code>head()</code> - shows the first 6 rows</li>
+<li><code>tail()</code> - shows the last 6 rows</li>
+</ul></li>
+<li>Names:
+<ul>
+<li><code>names()</code> - returns the column names (synonym of <code>colnames()</code> for <code>data.frame</code> objects)</li>
+</ul></li>
+<li><code>rownames()</code> - returns the row names</li>
+<li>Summary:</li>
+<li><code>str()</code> - structure of the object and information about the class, length and content of each column</li>
+<li><code>summary()</code> - summary statistics for each column</li>
+</ul>
+<p>Note: most of these functions are &quot;generic&quot;, they can be used on other types of objects besides <code>data.frame</code>.</p>
+<div id="challenge-1" class="challenge">
+<h3>Challenge</h3>
+<ul>
+<li>What is the class of the object <code>metadata</code>?</li>
+<li>How many rows and how many columns are in this object?</li>
+<li>Load in data again, storing it as <code>test_data</code> and using <code>stringsAsFactors=F</code></li>
+</ul>
+</div>
+<p>As you can see, the columns <code>genotype</code> and <code>celltype</code> are of a special class called <code>factor</code>. Before we learn more about the <code>data.frame</code> class, we are going to talk about factors. They are very useful but not necessarily intuitive, and therefore require some attention.</p>
+<h2 id="factors">Factors</h2>
+<p>Factors are used to represent categorical data. Factors can be ordered or unordered and are an important class for statistical analysis and for plotting.</p>
+<p>Factors are stored as integers, and have labels associated with these unique integers. While factors look (and often behave) like character vectors, they are actually integers under the hood, and you need to be careful when treating them like strings.</p>
+<p>Once created, factors can only contain a pre-defined set values, known as <em>levels</em>. By default, R always sorts <em>levels</em> in alphabetical order. For instance, if you have a factor with 2 levels:</p>
+<pre class="sourceCode r"><code class="sourceCode r">sex &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;male&quot;</span>))</code></pre>
+<p>R will assign <code>1</code> to the level <code>&quot;female&quot;</code> and <code>2</code> to the level <code>&quot;male&quot;</code> (because <code>f</code> comes before <code>m</code>, even though the first element in this vector is <code>&quot;male&quot;</code>). You can check this by using the function <code>levels()</code>, and check the number of levels using <code>nlevels()</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(sex)</code></pre>
+<pre><code>## [1] &quot;female&quot; &quot;male&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nlevels</span>(sex)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>Sometimes, the order of the factors does not matter, other times you might want to specify the order because it is meaningful (e.g., &quot;low&quot;, &quot;medium&quot;, &quot;high&quot;) or it is required by particular type of analysis. For example, in this case you might want the &quot;low&quot; group to be your base level. That is, we are only interested in changes relative to &quot;low&quot;.</p>
+<pre class="sourceCode r"><code class="sourceCode r">food &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
+
+<span class="kw">relevel</span>(food, <span class="dt">ref=</span><span class="st">&quot;low&quot;</span>) <span class="co"># set base level</span></code></pre>
+<p>Additionally, specifying the order of the levels allows to compare levels:</p>
+<pre class="sourceCode r"><code class="sourceCode r">food &lt;-<span class="st"> </span><span class="kw">factor</span>(food, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
+<span class="kw">levels</span>(food)
+<span class="kw">min</span>(food) ## doesn&#39;t work
+food &lt;-<span class="st"> </span><span class="kw">factor</span>(food, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>), <span class="dt">ordered=</span><span class="ot">TRUE</span>)
+<span class="kw">levels</span>(food)
+<span class="kw">min</span>(food) ## works!</code></pre>
+<p>In R's memory, these factors are represented by numbers (1, 2, 3). They are better than using simple integer labels because factors are self describing: <code>&quot;low&quot;</code>, <code>&quot;medium&quot;</code>, and <code>&quot;high&quot;</code>&quot; is more descriptive than <code>1</code>, <code>2</code>, <code>3</code>. Which is low? You wouldn't be able to tell with just integer data. Factors have this information built in. It is particularly helpful when there are many levels.</p>
+<h3 id="converting-factors">Converting factors</h3>
+<p>If you need to convert a factor to a character vector, simply use <code>as.character(x)</code>.</p>
+<p>Converting a factor to a numeric vector is however a little trickier, and you have to go via a character vector. Compare:</p>
+<pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">2</span>))
+<span class="kw">as.numeric</span>(f)               ## wrong! and there is no warning...
+<span class="kw">as.numeric</span>(<span class="kw">as.character</span>(f)) ## works...
+<span class="kw">as.numeric</span>(<span class="kw">levels</span>(f))[f]    ## The recommended way.</code></pre>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

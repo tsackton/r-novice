@@ -43,7 +43,7 @@ _Point out the different panels in RStudio._
 3. Workspace/History: workspace shows all active objects and history keeps track of all commands run in console
 4. Files/Plots/Packages/Help
 
-> ## Callout Box {.callout}
+> ### Shortcuts {.callout}
 > Navigating between Console and Script: `Ctrl 2` will take you to the console, `Ctrl 1` will take you back to the > script. Try it out! 
 >
 > Type in your script `6 + 6`. Keeping your cursor on the line, if you press `Ctrl Enter` you will see that the  code has been run in the console. Move to the console using shortcuts and use the `up arrow` to run the last command. You can clear the console with `Ctrl L` There are many [shortcuts](https://support.rstudio.com/hc/en-us/articles/200711853-Keyboard-Shortcuts) and they differ slightly based on the OS you are using.  
