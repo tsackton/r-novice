@@ -3,15 +3,30 @@ layout: page
 title: Lesson Title
 subtitle: Reference
 ---
-## [Topic Title One](01-one.html)
+
+# Take-home messages
+
+## [Intro to R](01-intro-to-R.html)
 
 ...commands and examples...
 
-## [Topic Title Two](02-two.html)
+## [Starting with data](02-starting-with-data.html)
 
 ...commands and examples...
 
-## Glossary
+
+## [Manipulating data](03-manipulating-data.html)
+
+...commands and examples...
+
+## [Re-organizing data](04-reorganizing-data.html)
+
+...commands and examples...
+
+
+
+
+# R Cheat Sheet (and common shortcuts)		
 
 key word 1
 :   Definition of first term

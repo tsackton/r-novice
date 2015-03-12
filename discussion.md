@@ -3,8 +3,11 @@ layout: page
 title: Lesson Title
 subtitle: Discussion
 ---
-*   First point of general discussion.
 
-    This may span several paragraphs.
+## Frequently aske questions
 
-*   Second point of general discussion.
+
+*   Here we include answers to questions commonly encountered from students taking the `r-novice` session of Software Carpentry 
+
+
+## Useful resources for more advanced features of R programming
