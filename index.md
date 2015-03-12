@@ -16,7 +16,7 @@ R is a versatile, open source programming/scripting language important tool for 
 
 
 ## The Big Data problem
-Your major thesis project involves studying the effects of a gene called `GGL` which appears to play a large role in addiction to the internet. To evaluate the gene's function you are comparing two different groups of mice; one set of mice with a normal GGL gene (wildtype) and one set in which the `GGL` gene is turned off (knockout). Within each set of mice you are also asked to evaluate two different cell types (A and B). The samples are sent to a sequencing facility and rather large data matrices are returned to you. Everytime you open it in Excel, your laptop freezes and crashes. After much frustration you _decide to use R to analyze the data_. 
+Your major thesis project involves studying the effects of a gene called `GGL` which appears to play a large role in addiction to the internet. To evaluate the gene's function you are comparing two different groups of mice; one set of mice with a normal GGL gene (wildtype) and one set in which the `GGL` gene is turned off (knockout). Within each set of mice you are also asked to evaluate two different cell types (A and B). The samples are sent to a sequencing facility and rather large data matrices are returned to you. Everytime you open it in Excel, your laptop freezes and crashes. **After much frustration you decide to use R to analyze the data.** 
 
 > ## Objectives {.prereq}
 >
@@ -26,7 +26,7 @@ Your major thesis project involves studying the effects of a gene called `GGL` w
 ## Topics
 
 1.  [Getting Started](00-before-we-start.html)
-2.  [Syntax and Objects](01-intro-to-R.html)
+2.  [Syntax and Data Structures](01-intro-to-R.html)
 3.  [Dataframes](02-starting-with-data.html)
 4.  [Manipulating data](03-manipulating-data.html)
 5.  [Re-organizing data](04-reorganizing-data.html)
