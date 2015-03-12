@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Data Manipulation</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">Data Manipulation</h1>
+          
+<div id="learning-objectives" class="objectives">
+<h2>Learning Objectives</h2>
+<ul>
+<li>Indexing and sequences</li>
+<li>Accessing elements of a dataframe</li>
+<li>Visualizing using <code>table</code>, <code>barplot</code></li>
+</ul>
+</div>
+<h1 id="indexing-and-sequences">Indexing and sequences</h1>
+<h2 id="vectors">Vectors</h2>
+<p>If we want to extract one or several values from a vector, we must provide one or several indices in square brackets, just as we do in math. For instance:</p>
+<pre class="sourceCode r"><code class="sourceCode r">food[<span class="dv">2</span>]
+food[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>)] <span class="co">#concantenate the values we want to explore</span>
+food[<span class="dv">2</span>:<span class="dv">4</span>]</code></pre>
+<p>R indexes start at 1. Programming languages like Fortran, MATLAB, and R start counting at 1, because that's what human beings typically do. Languages in the C family (including C++, Java, Perl, and Python) count from 0 because that's simpler for computers to do.</p>
+<p><code>:</code> is a special function that creates numeric vectors of integer in increasing or decreasing order, test <code>1:10</code> and <code>10:1</code> for instance. The function <code>seq()</code> (for <strong>seq</strong>uence) can be used to create more complex patterns:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">10</span>, <span class="dt">by=</span><span class="dv">2</span>)
+<span class="kw">seq</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dt">length.out=</span><span class="dv">3</span>)       <span class="co"># equal breaks of sequence into vector length = length.out</span>
+<span class="kw">seq</span>(<span class="dv">50</span>, <span class="dt">by=</span><span class="dv">5</span>, <span class="dt">length.out=</span><span class="dv">10</span>)   <span class="co"># sequence 50 by 5 until you hit vector length = length.out</span>
+<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">8</span>, <span class="dt">by=</span><span class="dv">3</span>)                <span class="co"># sequence by 3 until you hit 8</span></code></pre>
+<p>Another useful function in creating sequences is <code>rep</code>, which <em>rep</em>licates elements of vector (or list, but not covered here). In it's simplest form you can replicate a value a specified number of times. More complex operations include replicating a sequence in a specified order.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rep</span>(<span class="dv">51</span>:<span class="dv">54</span>, <span class="dv">2</span>)
+<span class="kw">rep</span>(<span class="dv">51</span>:<span class="dv">54</span>, <span class="dt">each =</span> <span class="dv">2</span>)       <span class="co"># not the same.</span>
+<span class="kw">rep</span>(<span class="dv">51</span>:<span class="dv">54</span>, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>))   <span class="co"># specify replicate number for each element individually</span>
+<span class="kw">rep</span>(<span class="dv">51</span>:<span class="dv">54</span>, <span class="dt">each =</span> <span class="dv">2</span>, <span class="dt">len =</span> <span class="dv">4</span>)    <span class="co"># only first 4 elements displayed</span>
+<span class="kw">rep</span>(<span class="dv">51</span>:<span class="dv">54</span>, <span class="dt">each =</span> <span class="dv">2</span>, <span class="dt">len =</span> <span class="dv">10</span>)   <span class="co"># 8 integers plus two recycled 1&#39;s.</span>
+<span class="kw">rep</span>(<span class="dv">51</span>:<span class="dv">54</span>, <span class="dt">each =</span> <span class="dv">2</span>, <span class="dt">times =</span> <span class="dv">3</span>)  <span class="co"># length 24, 3 complete replications</span></code></pre>
+<div id="challenge" class="challenge">
+<h3>Challenge</h3>
+<p>Using the new functions you have learned we can now <strong>create</strong> a <code>data.frame</code> manually with the function <code>data.frame()</code>. This function takes in each column as an argument by giving it name, and the <code>c()</code> function concatenates the values into a vector. For this activity create three vectors corresponding to the three columns (<code>genotype</code>, <code>celltype</code>, <code>replicate</code>) in our <code>metadata</code> using the functions we just learned.</p>
+</div>
+<h2 id="dataframes">Dataframes</h2>
+<p>Our <code>metadata</code> frame has rows and columns (it has 2 dimensions), so if we want to extract some specific data from it we need to specify the &quot;coordinates&quot; we want from it. Row numbers come first, followed by column numbers.</p>
+<pre class="sourceCode r"><code class="sourceCode r">metadata[<span class="dv">1</span>, <span class="dv">1</span>]   <span class="co"># first element in the first column of the data frame</span>
+metadata[<span class="dv">1</span>, <span class="dv">3</span>]   <span class="co"># first element in the 3rd column</span>
+metadata[<span class="dv">1</span>:<span class="dv">3</span>, ] <span class="co"># first three rows</span>
+metadata[<span class="dv">3</span>, ]    <span class="co"># the 3rd element for all columns</span>
+metadata[ ,<span class="dv">3</span>]    <span class="co"># the entire 3rd column</span></code></pre>
+<div id="challenge-1" class="challenge">
+<h3>Challenge</h3>
+<p>The function <code>nrow()</code> on a <code>data.frame</code> returns the number of rows. Use it, in conjuction with <code>seq()</code> to create a new <code>data.frame</code> called <code>data_by_2</code> that includes every other row of the metadata.</p>
+</div>
+<p>For larger datasets, it can be tricky to remember the column number that corresponds to a particular variable. (Are species names in column 5 or 7? oh, right... they are in column 6). In some cases, in which column the variable will be can change if the script you are using adds or removes columns. It's therefore often better to use column names to refer to a particular variable, and it makes your code easier to read and your intentions clearer.</p>
+<p>You can do operations on a particular column, by selecting it using the <code>$</code> sign. In this case, the entire column is a vector. For instance, to extract all the gentotypes from our dataset, we can use: <code>metadata$genotype</code>. You can use <code>names(metadata)</code> or <code>colnames(metadata)</code> to remind yourself of the column names.</p>
+<p>In some cases, you may way to select more than one column. You can do this using the square brackets and concatenating a vector of strings that correspond to column names:</p>
+<pre class="sourceCode r"><code class="sourceCode r">metadata[, <span class="kw">c</span>(<span class="st">&quot;genotype&quot;</span>, <span class="st">&quot;celltype&quot;</span>)]</code></pre>
+<pre><code>##          genotype celltype
+## sample1        Wt    typeA
+## sample2        Wt    typeA
+## sample3        Wt    typeA
+## sample4        KO    typeA
+## sample5        KO    typeA
+## sample6        KO    typeA
+## sample7        Wt    typeB
+## sample8        Wt    typeB
+## sample9        Wt    typeB
+## sample10       KO    typeB
+## sample11       KO    typeB
+## sample12       KO    typeB</code></pre>
+<h2 id="plots">Plots</h2>
+<p>In our metadata file we have two factors <code>genotype</code> and <code>celltype</code>. While the <code>summary()</code> function tabulates numbers of samples and how they are distributed, we can go one step further with the <code>table</code> function which builds a contingeny table of the counts at each combination of factor levels.</p>
+<pre class="sourceCode r"><code class="sourceCode r">twofactor &lt;-<span class="st"> </span>metadata[, <span class="kw">c</span>(<span class="st">&quot;genotype&quot;</span>, <span class="st">&quot;celltype&quot;</span>)]
+<span class="kw">table</span>(twofactor) </code></pre>
+<pre><code>##         celltype
+## genotype typeA typeB
+##       KO     3     3
+##       Wt     3     3</code></pre>
+<p>We can then take that table and visualize it using <code>barplot</code>. Samples are divided by celltype and the proportion of WT and KO are represented by different shades of grey within each bar.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(<span class="kw">table</span>(twofactor), <span class="dt">legend=</span><span class="ot">TRUE</span>) </code></pre>
+<p><img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" /></p>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>

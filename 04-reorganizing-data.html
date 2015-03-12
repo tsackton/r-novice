@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="pandoc">
+    <title>Software Carpentry: Re-organizing data</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="css/swc.css" />
+    <link rel="alternate" type="application/rss+xml" title="Software Carpentry Blog" href="http://software-carpentry.org/feed.xml"/>
+    <meta charset="UTF-8" />
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body class="lesson">
+    <div class="container">
+      <div class="banner">
+        <a href="http://software-carpentry.org" title="Software Carpentry">
+          <img alt="Software Carpentry banner" src="img/software-carpentry-banner.png" />
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+          <h1 class="title">Re-organizing data</h1>
+          
+<div id="learning-objectives" class="objectives">
+<h2>Learning Objectives</h2>
+<ul>
+<li>Subsetting data and reordering data</li>
+<li>Matching elements of dataframes</li>
+<li>Replacing values in row/vectors</li>
+<li>Add/remove columns and rows</li>
+<li>Write to file</li>
+</ul>
+</div>
+<h1 id="subsetting-data">Subsetting data</h1>
+<p>When analyzing data, we often want to look at partial statistics, such as the maximum value of a variable per species or the average value per celltype.</p>
+<p>One way to do this is to select the data we want, and create a new temporary array, using the <code>subset()</code> function. For instance, if we just want to look at the samples of a specific celltype &quot;typeA&quot;:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(metadata, celltype ==<span class="st"> &quot;typeA&quot;</span>)</code></pre>
+<pre><code>##         genotype celltype replicate
+## sample1       Wt    typeA         1
+## sample2       Wt    typeA         2
+## sample3       Wt    typeA         3
+## sample4       KO    typeA         1
+## sample5       KO    typeA         2
+## sample6       KO    typeA         3</code></pre>
+<p>We can also subset using other <a href="http://www.statmethods.net/management/operators.html">logical operators</a> in R. For example suppose we wanted to subset to keep only the <strong>WT samples</strong> from the <strong>typeA cells</strong>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(metadata, celltype ==<span class="st"> &quot;typeA&quot;</span> &amp;<span class="st"> </span>genotype ==<span class="st"> &quot;Wt&quot;</span>)</code></pre>
+<pre><code>##         genotype celltype replicate
+## sample1       Wt    typeA         1
+## sample2       Wt    typeA         2
+## sample3       Wt    typeA         3</code></pre>
+<p>Alternatively, we could try looking at only the first two replicates of each sample set. Here, we can use the less than operator since replicate is currently a numeric vector. Adding in the argument select allows us to specify which columns to keep. Which columns are left?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(metadata, replicate &lt;<span class="st"> </span><span class="dv">3</span>, <span class="dt">select =</span> <span class="kw">c</span>(<span class="st">&#39;genotype&#39;</span>, <span class="st">&#39;celltype&#39;</span>))</code></pre>
+<h1 id="matching-data">Matching data</h1>
+<p>Let's bring in our data matrix. The experimental design file is associated with RNA-Seq data. From the experiment we have three different data files that have been generated which can be found in the <code>/data</code> directory. We will be using the RPKM data for now. Load in this file similar to how we did for our metadata file.</p>
+<pre class="sourceCode r"><code class="sourceCode r">rpkm_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/counts.rpkm&quot;</span>)</code></pre>
+<p>Take a look at the first few lines of the data matrix to see what's in there.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(rpkm_data)</code></pre>
+<p>It looks as if the sample names (header) are similar to the row names of our metadata file, but it's hard to tell since they are not in the same order. We can do a quick check of the dimensions and see if the numbers match up.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(rpkm_data)</code></pre>
+<pre><code>## [1] 38828    12</code></pre>
+<p><strong>Do we have data for every sample that we have metadata?</strong> To do that we can use the <code>%in%</code> operator. Although lacking in <a href="http://dr-k-lo.blogspot.com/2013/11/in-in-r-underused-in-operator.html">documentation</a> this operator is well used and quite useful. It will take a vector as input to the left and will evaluate each element to see if there is a match in the vector that follows on the right of the operator. For each element of vector on the left it will return a logical value. Take a look at the example below:</p>
+<pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">11</span>)   <span class="co"># odd numbers</span>
+B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">10</span>,<span class="dv">12</span>)  <span class="co"># even numbers</span>
+
+<span class="co"># test to see if any of A are in B</span>
+A %in%<span class="st"> </span>B</code></pre>
+<pre><code>## [1] FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<p>Since vector A is odd numbers and vector B is even numbers, there is no overlap and so for each element we get a <code>FALSE</code>. Let's change a couple of numbers inside vector B to match vector A.</p>
+<pre class="sourceCode r"><code class="sourceCode r">B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">1</span>,<span class="dv">5</span>)  <span class="co"># add some odd numbers in </span>
+
+<span class="co"># test to see if any of A are in B</span>
+A %in%<span class="st"> </span>B</code></pre>
+<pre><code>## [1]  TRUE FALSE  TRUE FALSE FALSE FALSE</code></pre>
+<p>The logical vector returned will tell us which elements are mismatching and we can count how many are <code>TRUE</code> to get an overlap. The two vectors do not have to be the same size. In this example the vectors are small and so it's easy to count; but when we work with large datasets this is not practical. The <code>all</code> function comes in handy here. Given a logical vector, it will tell you whether are all values returned are <code>TRUE</code>. If there is atleast one <code>FALSE</code> value, the <code>all</code> function will return a <code>FALSE</code> and you know that all of A are not contained in B.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">all</span>(A %in%<span class="st"> </span>B)</code></pre>
+<p>Suppose we had <strong>two vectors that had the same values but just not in the same order</strong>. We could also use <code>all</code> to test for that. Rather than using the <code>%in%</code> operator we would use <code>==</code> and compare each element to the same position in the other vector. Unlike the <code>%in%</code> operator, for this to work you must have <strong>two vectors that are of equal length</strong>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)
+B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">1</span>)  <span class="co"># same numbers but backwards </span>
+
+<span class="co"># test to see if any of A are in B</span>
+A %in%<span class="st"> </span>B
+
+<span class="co"># test to see if any of A is equal to B</span>
+A ==<span class="st"> </span>B
+
+<span class="co"># use all to check if they are a perfect match</span>
+<span class="kw">all</span>(A ==<span class="st"> </span>B)</code></pre>
+<div id="challenge" class="challenge">
+<h3>Challenge</h3>
+<p>Apply the <code>all</code> function to check whether all of the row names of our metadata are contained in the header of our &gt; data file. Also check to see that they are in the same order.</p>
+</div>
+<h2 id="subset-data-using-matching">Subset data using matching</h2>
+<p>The column names in our data matrix are all contained in the row names of our metadata, but they appear to be out of order. We can use the <code>match()</code> function to create a new data matrix such that samples are in the same order. The function <code>match()</code> takes at least 2 arguments: the values to be matched (in our case the row names <code>metadata</code>), and the table that contains the values to be matched against (in our case the column names of <code>data</code>. The function returns the position of the matches in the table, and this can be used to data columns. For values that don't match you can specify what values you would have it assigned using <code>nomatch</code> argument (by default this is NA).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Retrieve a vector of indices where the column names are reordered to match the row names </span>
+m &lt;-<span class="st"> </span><span class="kw">match</span>(<span class="kw">row.names</span>(metadata), <span class="kw">colnames</span>(rpkm_data))
+
+<span class="co"># Create a re-ordered data matrix based on the matching indices</span>
+data_ordered  &lt;-<span class="st"> </span>rpkm_data[,m]</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check and see what happened</span>
+<span class="kw">head</span>(data_ordered)
+
+<span class="co"># Verify that the two are identical in order</span>
+<span class="kw">all</span>(<span class="kw">row.names</span>(metadata) ==<span class="st"> </span><span class="kw">colnames</span>(data_ordered))</code></pre>
+<h1 id="modifying-data.frames">Modifying <code>data.frames</code></h1>
+<p>Sometimes, you may have to add a new column to your dataset that represents a new variable. You can add columns to a <code>data.frame</code> using the function <code>cbind()</code> (<strong>c</strong>olumn <strong>bind</strong>). Beware, the additional column must have the same number of elements as there are rows in the <code>data.frame</code>.</p>
+<p>The data matrix we are working with has Ensembl IDs as the identifier, however it would also be nice to know the official gene symbols assocated with those IDs. The gene annotation was only provided for the counts file (<code>data/annotated_combined.counts</code>) but not the RPKM data. We need to take the gene symbols from the counts file and add it as a column in our data matrix.</p>
+<pre class="sourceCode r"><code class="sourceCode r">counts &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&#39;data/annotated_combined.counts&#39;</span>)</code></pre>
+<div id="challenge-1" class="challenge">
+<h3>Challenge</h3>
+<p>First you will use what you have learned previously to read in the file and check to make see if:</p>
+<ol style="list-style-type: decimal">
+<li>all of the Ensemble IDs in the count matrix are contained in the RPKM matrix</li>
+<li>the order of Ensemble Ids is the same in both data frames</li>
+<li>subset such that you have two data files that have matching row names</li>
+</ol>
+</div>
+<p>Now, we should have two data files of the same dimensions. The column of interest from our counts file (gene symbols) can be cut and paste onto our data file using <code>cbind</code> (<strong>c</strong>olumn__bind__) function to add columns. The number of rows needs to be identical between the two objects.</p>
+<p>Suppose we wanted to remove the column, just like you can select columns by their positions in the <code>data.frame</code> or by their names you can also remove. The only difference is that we would use a minus sign to indicate the column number we wish to remove <code>annot_data[,-1]</code> or specify the column by name <code>annot_data[,-genesymbol]</code>. Note that the column names should not be quoted</p>
+<p>Similar to <code>cbind()</code> for columns, there is a function <code>rbind()</code> (<strong>r</strong>ow__bind__) that puts together two <code>data.frame</code>. With <code>rbind()</code> the number of columns and their names must be identical between the two objects.</p>
+<div id="challenge-2" class="challenge">
+<h3>Challenge</h3>
+<p>Use the code provided below to generate a dataframe <code>df1</code> of coloured blocks. Given the dataframe, try the following tasks:</p>
+<ol style="list-style-type: decimal">
+<li>The length and width of the blocks are provided, can you add a column to include the following height values: <code>20, 20, 30</code>?</li>
+<li>We have information for an additional block that is yellow, except we don't have height for information (height =20; width= 15). Can you still add the yellow block in as an additional row?</li>
+</ol>
+</div>
+<pre class="sourceCode r"><code class="sourceCode r">df1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">color=</span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="dt">length=</span><span class="kw">c</span>(<span class="dv">15</span>,<span class="dv">20</span>,<span class="dv">26</span>), <span class="dt">width=</span><span class="kw">c</span>(<span class="dv">20</span>,<span class="dv">25</span>,<span class="dv">35</span>))</code></pre>
+<h1 id="writing-data-to-file">Writing data to file</h1>
+<p>Although we have the annotated RPKM data matrix stored in memory, it would be quite useful for future analyses. We can export it to file using the <code>write.csv</code> command, including arguments for the filename (be sure to add on the correct path so it gets exported to your <code>data</code> directory). There are a numberof different options for data output (and input) and we will cover that in more depth in the last section of the R session.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">write.csv</span>(annotated_rpkm, <span class="dt">file=</span><span class="st">&quot;data/annotated_rpkm&quot;</span>, <span class="dt">quote=</span>F)</code></pre>
+        </div>
+      </div>
+      <div class="footer">
+        <a class="label swc-blue-bg" href="http://software-carpentry.org">Software Carpentry</a>
+        <a class="label swc-blue-bg" href="https://github.com/swcarpentry/lesson-template">Source</a>
+        <a class="label swc-blue-bg" href="mailto:admin@software-carpentry.org">Contact</a>
+        <a class="label swc-blue-bg" href="LICENSE.html">License</a>
+      </div>
+    </div>
+    <!-- Javascript placed at the end of the document so the pages load faster -->
+    <script src="http://software-carpentry.org/v5/js/jquery-1.9.1.min.js"></script>
+    <script src="css/bootstrap/bootstrap-js/bootstrap.js"></script>
+  </body>
+</html>
