@@ -1,4 +1,4 @@
-git-novice
+r-novice
 ===============
 
 An introduction to the basics of R Statstical Programming software and using RStudio
