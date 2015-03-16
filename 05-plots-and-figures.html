@@ -160,12 +160,12 @@ base::tapply            Apply a Function Over a Ragged Array</code></pre>
 <p>The previous challenge asked you to compute the standard error for &quot;sample1&quot;. Using the <code>apply</code> function generate a vector of standard error values for each sample. The use the code provided below to add error bars to your barplot.</p>
 </div>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymax=</span>upper, <span class="dt">ymin=</span>lower), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">data=</span>means.sem)</code></pre>
-<h1 id="advanced-figures-optional">Advanced figures (optional)</h1>
+<h1 id="more-advanced-figures-optional">More advanced figures (optional)</h1>
 <p>A figure that is often used in exploratory analsyis of data is PCA plot. PCA (principal components analysis) is a multivariate technique that allows us to summarize the systematic patterns of variations in the data. PCA takes the expresson levels for all probes and transforms it in principal component space, reducing each sample into one point (as coordinates within that space). This allows us to separate samples according to expression variation, and identify potential outliers.</p>
 <h2 id="pca">PCA</h2>
 <p>To plot a PCA plot we will be using <code>ggplot</code>, but first we will need to take the data matrix and generate the principal component vectors using <code>prcomp</code>. The input required is a transposed version of what we currently have loaded. That is, we need to have samples as our rows and genes as our columns. R has a built-in function to transpose which is denoted by <code>t()</code>. In the interest of time, ee will use the data matrix we generated previously thas <code>NA</code>s removed (although <code>prcomp</code> has an argument to help deal with this).</p>
-<pre class="sourceCode r"><code class="sourceCode r">pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(data_noNA))</code></pre>
-<pre><code>## Error in t(data_noNA): object &#39;data_noNA&#39; not found</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(rpkm_noNA))</code></pre>
+<pre><code>## Error in colMeans(x, na.rm = TRUE): &#39;x&#39; must be numeric</code></pre>
 <p>Use the <code>str</code> function to take a quick peek at what is returned to us from the <code>prcomp</code> function. You can cross-reference with the help pages to see that is corresponds with what you are expected to be returned (<code>?prcomp</code>). There should be a list of five objects; the one we are interested in is <code>x</code> which is a matrix of the principal component vectors. Let's save that data matrix by assigning to a new variables.</p>
 <pre class="sourceCode r"><code class="sourceCode r">pc_mat &lt;-<span class="st"> </span>pca_results$x</code></pre>
 <pre><code>## Error in eval(expr, envir, enclos): object &#39;pca_results&#39; not found</code></pre>

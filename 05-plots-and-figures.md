@@ -289,7 +289,7 @@ ggplot(data=df, aes(x=row.names(df), y=samplemeans, fill=genotype)) +
 geom_errorbar(aes(ymax=upper, ymin=lower), position=position_dodge(0.9), data=means.sem)
 ```
 
-# Advanced figures (optional)
+# More advanced figures (optional)
 
 A figure that is often used in exploratory analsyis of data is PCA plot. PCA (principal components analysis) is a multivariate technique that allows us to summarize the systematic patterns of variations in the data. PCA takes the expresson levels for all probes and transforms it in principal component space, reducing each sample into one point (as coordinates within that space). This allows us to separate samples according to expression variation, and identify potential outliers.
 
@@ -298,11 +298,11 @@ To plot a PCA plot we will be using `ggplot`, but first we will need to take the
 
 
 ```r
-pca_results <- prcomp(t(data_noNA))
+pca_results <- prcomp(t(rpkm_noNA))
 ```
 
 ```
-## Error in t(data_noNA): object 'data_noNA' not found
+## Error in colMeans(x, na.rm = TRUE): 'x' must be numeric
 ```
 
 Use the `str` function to take a quick peek at what is returned to us from the `prcomp` function. You can cross-reference with the help pages to see that is corresponds with what you are expected to be returned (`?prcomp`). There should be a list of five objects; the one we are interested in is `x` which is a matrix of the principal component vectors. Let's save that data matrix by assigning to a new variables.  
