@@ -236,7 +236,7 @@ A figure that is often used in exploratory analsyis of data is PCA plot. PCA (pr
 To plot a PCA plot we will be using `ggplot`, but first we will need to take the data matrix and generate the principal component vectors using `prcomp`. The input required is a transposed version of what we currently have loaded. That is, we need to have samples as our rows and genes as our columns. R has a built-in function to transpose which is denoted by `t()`. In the interest of time, ee will use the data matrix we generated previously thas `NA`s removed (although `prcomp` has an argument to help deal with this). 
 
 ```{r}
-pca_results <- prcomp(t(rpkm_noNA))
+pca_results <- prcomp(t(rpkm_noNA[,2:ncol(rpkm_noNA)]))
 ```
 
 Use the `str` function to take a quick peek at what is returned to us from the `prcomp` function. You can cross-reference with the help pages to see that is corresponds with what you are expected to be returned (`?prcomp`). There should be a list of five objects; the one we are interested in is `x` which is a matrix of the principal component vectors. Let's save that data matrix by assigning to a new variables.  
@@ -247,7 +247,7 @@ pc_mat <- pca_results$x
 
 We are going to take a look at the first two principal componenets by plotting them against each other. Since we will want to include information from our metadata file, we can concatenate the PCA results to our metadata into a data frame for input to `ggplot`. The graphic type that we are using is a scatter plot denoted by `geom_point(), and we have specified to color by genotype.
 
-```{r advanced-figures}
+```{r advanced-figures, fig.align='center', fig.height=6, fig.width=8}
 
 df <- cbind(metadata, pc_mat[,c('PC1', 'PC2')])
 
@@ -258,7 +258,7 @@ ggplot(df, aes(PC1, PC2, color = genotype)) +
 We see that there is one obvious outlier in the bottom right hand corner of the plot, which based on the legend correponds to a WT sample. It would be useful to know which sample that is. Adding to the chain of functions we can also include `geom_text` which draws a text label at any give (x,y) coordinate. There are additional parameters we need to play with to get the figure to look good (which mostly comes from trial and error). Now we know that "sample7" is an outlier".
 
 
-```{r}
+```{r, fig.align='center', fig.width=8, fig.height=6}
 ggplot(df, aes(PC1, PC2, label = row.names(df), color = genotype)) + 
   geom_point() +
   geom_text(aes(PC1, PC2, label = row.names(df)), size = 6, hjust=0.1, vjust=0.1) +

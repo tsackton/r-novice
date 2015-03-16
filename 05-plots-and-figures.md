@@ -298,11 +298,7 @@ To plot a PCA plot we will be using `ggplot`, but first we will need to take the
 
 
 ```r
-pca_results <- prcomp(t(rpkm_noNA))
-```
-
-```
-## Error in colMeans(x, na.rm = TRUE): 'x' must be numeric
+pca_results <- prcomp(t(rpkm_noNA[,2:ncol(rpkm_noNA)]))
 ```
 
 Use the `str` function to take a quick peek at what is returned to us from the `prcomp` function. You can cross-reference with the help pages to see that is corresponds with what you are expected to be returned (`?prcomp`). There should be a list of five objects; the one we are interested in is `x` which is a matrix of the principal component vectors. Let's save that data matrix by assigning to a new variables.  
@@ -312,29 +308,17 @@ Use the `str` function to take a quick peek at what is returned to us from the `
 pc_mat <- pca_results$x
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'pca_results' not found
-```
-
 We are going to take a look at the first two principal componenets by plotting them against each other. Since we will want to include information from our metadata file, we can concatenate the PCA results to our metadata into a data frame for input to `ggplot`. The graphic type that we are using is a scatter plot denoted by `geom_point(), and we have specified to color by genotype.
 
 
 ```r
 df <- cbind(metadata, pc_mat[,c('PC1', 'PC2')])
-```
 
-```
-## Error in cbind(metadata, pc_mat[, c("PC1", "PC2")]): object 'pc_mat' not found
-```
-
-```r
 ggplot(df, aes(PC1, PC2, color = genotype)) + 
   geom_point(size=3)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'PC1' not found
-```
+<img src="figure/advanced-figures-1.png" title="plot of chunk advanced-figures" alt="plot of chunk advanced-figures" style="display: block; margin: auto;" />
 
 We see that there is one obvious outlier in the bottom right hand corner of the plot, which based on the legend correponds to a WT sample. It would be useful to know which sample that is. Adding to the chain of functions we can also include `geom_text` which draws a text label at any give (x,y) coordinate. There are additional parameters we need to play with to get the figure to look good (which mostly comes from trial and error). Now we know that "sample7" is an outlier".
 
@@ -347,9 +331,7 @@ ggplot(df, aes(PC1, PC2, label = row.names(df), color = genotype)) +
   scale_x_continuous(expand = c(0.3,  0.3))
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'PC1' not found
-```
+<img src="figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" style="display: block; margin: auto;" />
 
 
 We have only scratched the surface here. To learn more, see the [ggplot reference site](http://docs.ggplot2.org/), and Winston Chang's excellent [Cookbook for R](http://wiki.stdout.org/rcookbook/Graphs/) site. Though slightly out of date, [ggplot2: Elegant Graphics for Data Anaysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) is still the definative book on this subject.
