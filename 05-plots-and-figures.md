@@ -289,6 +289,72 @@ ggplot(data=df, aes(x=row.names(df), y=samplemeans, fill=genotype)) +
 geom_errorbar(aes(ymax=upper, ymin=lower), position=position_dodge(0.9), data=means.sem)
 ```
 
+# Advanced figures (optional)
+
+A figure that is often used in exploratory analsyis of data is PCA plot. PCA (principal components analysis) is a multivariate technique that allows us to summarize the systematic patterns of variations in the data. PCA takes the expresson levels for all probes and transforms it in principal component space, reducing each sample into one point (as coordinates within that space). This allows us to separate samples according to expression variation, and identify potential outliers.
+
+## PCA
+To plot a PCA plot we will be using `ggplot`, but first we will need to take the data matrix and generate the principal component vectors using `prcomp`. The input required is a transposed version of what we currently have loaded. That is, we need to have samples as our rows and genes as our columns. R has a built-in function to transpose which is denoted by `t()`. In the interest of time, ee will use the data matrix we generated previously thas `NA`s removed (although `prcomp` has an argument to help deal with this). 
+
+
+```r
+pca_results <- prcomp(t(data_noNA))
+```
+
+```
+## Error in t(data_noNA): object 'data_noNA' not found
+```
+
+Use the `str` function to take a quick peek at what is returned to us from the `prcomp` function. You can cross-reference with the help pages to see that is corresponds with what you are expected to be returned (`?prcomp`). There should be a list of five objects; the one we are interested in is `x` which is a matrix of the principal component vectors. Let's save that data matrix by assigning to a new variables.  
+
+
+```r
+pc_mat <- pca_results$x
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'pca_results' not found
+```
+
+We are going to take a look at the first two principal componenets by plotting them against each other. Since we will want to include information from our metadata file, we can concatenate the PCA results to our metadata into a data frame for input to `ggplot`. The graphic type that we are using is a scatter plot denoted by `geom_point(), and we have specified to color by genotype.
+
+
+```r
+df <- cbind(metadata, pc_mat[,c('PC1', 'PC2')])
+```
+
+```
+## Error in cbind(metadata, pc_mat[, c("PC1", "PC2")]): object 'pc_mat' not found
+```
+
+```r
+ggplot(df, aes(PC1, PC2, color = genotype)) + 
+  geom_point(size=3)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'PC1' not found
+```
+
+We see that there is one obvious outlier in the bottom right hand corner of the plot, which based on the legend correponds to a WT sample. It would be useful to know which sample that is. Adding to the chain of functions we can also include `geom_text` which draws a text label at any give (x,y) coordinate. There are additional parameters we need to play with to get the figure to look good (which mostly comes from trial and error). Now we know that "sample7" is an outlier".
+
+
+
+```r
+ggplot(df, aes(PC1, PC2, label = row.names(df), color = genotype)) + 
+  geom_point() +
+  geom_text(aes(PC1, PC2, label = row.names(df)), size = 6, hjust=0.1, vjust=0.1) +
+  scale_x_continuous(expand = c(0.3,  0.3))
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'PC1' not found
+```
+
+
+We have only scratched the surface here. To learn more, see the [ggplot reference site](http://docs.ggplot2.org/), and Winston Chang's excellent [Cookbook for R](http://wiki.stdout.org/rcookbook/Graphs/) site. Though slightly out of date, [ggplot2: Elegant Graphics for Data Anaysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) is still the definative book on this subject.
+
+
 ## Writing figures to file
 
 There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on `Export` when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png`.

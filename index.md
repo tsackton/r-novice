@@ -30,6 +30,7 @@ Your major thesis project involves studying the effects of a gene called `GGL` w
 3.  [Dataframes](02-starting-with-data.html)
 4.  [Manipulating data](03-manipulating-data.html)
 5.  [Re-organizing data](04-reorganizing-data.html)
+6.  [Calculating simple statistics and Plots](05-plots-and-figures.html)
 
 ## Other Resources
 
