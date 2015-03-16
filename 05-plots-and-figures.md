@@ -1,4 +1,4 @@
-------
+---
 layout: topic
 title: Analyzing and Plotting Data
 minutes: 60
@@ -13,7 +13,7 @@ minutes: 60
 > * Basic plots using RNA-Seq data: scatter plots, boxplots, histograms (base functions)
 > * Introducing ggplot2: scatter plots, boxplots, histograms (base functions)
 > * Advanced plots: correlation heat map ,scatterplot, PCA, histogram of average values
-> * Writing to file
+> * Writing images (and other things) to file
 > * Not covered: working with missing values? unique?
 
 
@@ -50,13 +50,12 @@ In some cases, it might be useful to remove the missing data from the vector. Fo
 
 ```r
 rpkm_noNA <- annotated_rpkm[complete.cases(annotated_rpkm), ]
-dim(rpkm_noNA)
 ```
 
 > ### Challenge {.challenge}
-> Can you compute the [standard error](http://en.wikipedia.org/wiki/Standard_error) for "sample1". (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)
+> Compute the [standard error](http://en.wikipedia.org/wiki/Standard_error) for "sample1". (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)
 
-## The Apply Function
+## The apply Function
 To obtain mean values for all samples we can use `mean` on each column individually, but there is also an easier way to go about it. The `apply` family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.
 
 
@@ -89,6 +88,13 @@ When we are working with large sets of numbers it can be useful to display that 
 ```r
 # Create a combined data frame
 all(rownames(metadata) == names(samplemeans)) # sanity check for sample order
+```
+
+```
+## [1] TRUE
+```
+
+```r
 df <- cbind(metadata, samplemeans) 
 ```
 
@@ -99,7 +105,7 @@ Let's start with a **scatterplot**. A scatter plot provides a graphical view of 
 plot(samplemeans)
 ```
 
-![plot of chunk unnamed-chunk-6](img/r-lesson-unnamed-chunk-6-1.png) 
+<img src="figure/scatter-plot1-1.png" title="plot of chunk scatter-plot1" alt="plot of chunk scatter-plot1" style="display: block; margin: auto;" />
 
 Each point represents a sample and the value on the x-axis is the sample number, where the values on the y-axis correspond to the average expression for that sample. For any plot you can customize many features of your graphs (fonts, colors, axes, titles) through [graphic options](http://www.statmethods.net/advgraphs/parameters.html)
 For this scatterplot we'll add a title to the plot with `main` in addition to changing the shape of the data point using `pch`.
@@ -109,13 +115,13 @@ For this scatterplot we'll add a title to the plot with `main` in addition to ch
 plot(samplemeans, pch=8)
 ```
 
-![plot of chunk unnamed-chunk-7](img/r-lesson-unnamed-chunk-7-1.png) 
+<img src="figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" />
 
 ```r
 plot(samplemeans, pch=8, main="Scatter plot of mean values")
 ```
 
-![plot of chunk unnamed-chunk-7](img/r-lesson-unnamed-chunk-7-2.png) 
+<img src="figure/unnamed-chunk-6-2.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" />
 
 In the case of our data, a **barplot**  would be much more useful. We can use `barplot` to draw a single bar representing each sample and the height indicates the average expression level. 
 
@@ -124,22 +130,25 @@ In the case of our data, a **barplot**  would be much more useful. We can use `b
 barplot(samplemeans)
 ```
 
-![plot of chunk unnamed-chunk-8](img/r-lesson-unnamed-chunk-8-1.png) 
+<img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
 
-The sample names appear to be too large for the plot, we can change that by changing the `cex.names` value. Alternatively we can also just change the names to be numeric values and keep the same size.
+The sample names appear to be too large for the plot, we can change that by changing the `cex.names` value. 
 
 
 ```r
 barplot(samplemeans, cex.names=0.5)
 ```
 
-![plot of chunk unnamed-chunk-9](img/r-lesson-unnamed-chunk-9-1.png) 
+<img src="figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
+
+The names are too small to read. Alternatively we can also just change the names to be numeric values and keep the same size.
+
 
 ```r
 barplot(samplemeans, names.arg=c(1:12)) # supply numbers as labels
 ```
 
-![plot of chunk unnamed-chunk-9](img/r-lesson-unnamed-chunk-9-2.png) 
+<img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
 
 We can also flip the axes so that the plot is projected horizontally.
 
@@ -148,7 +157,7 @@ We can also flip the axes so that the plot is projected horizontally.
 barplot(samplemeans, names.arg=c(1:12), horiz=TRUE) 
 ```
 
-![plot of chunk unnamed-chunk-10](img/r-lesson-unnamed-chunk-10-1.png) 
+<img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
 
 If we are interested in an overall distribution of values, **histogram** is a plot very commonly used. It plots the frequencies that data appears within certain ranges. To plot a histogram of the data use the `hist` command:
 
@@ -157,7 +166,8 @@ If we are interested in an overall distribution of values, **histogram** is a pl
 hist(samplemeans)
 ```
 
-![plot of chunk unnamed-chunk-11](img/r-lesson-unnamed-chunk-11-1.png) 
+<img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
+
 The range of values for sample means is 22 to 39. As you can see R will automatically calculate the intervals to use. There are many options to determine how to break up the intervals. Let's increase the number of breaks to see how that changes the plot:
 
 
@@ -165,15 +175,16 @@ The range of values for sample means is 22 to 39. As you can see R will automati
 hist(samplemeans, xlab="Mean expression level", main="", breaks=20) 
 ```
 
-![plot of chunk hist](img/r-lesson-hist-1.png) 
+<img src="figure/hist-1.png" title="plot of chunk hist" alt="plot of chunk hist" style="display: block; margin: auto;" />
 
 Similar to the other plots we can tweak the aesthetics. Let's color in the bar and remove the borders:
+
 
 ```r
 hist(samplemeans, xlab="Mean expression level", main="", col="darkgrey", border=FALSE) 
 ```
 
-![plot of chunk unnamed-chunk-12](img/r-lesson-unnamed-chunk-12-1.png) 
+<img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
 
 Using addiitonal sample information from our metadata, we can use plots to compare values between the two different celltypes 'typeA' and 'typeB' using a **boxplot**. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set. 
 
@@ -183,9 +194,9 @@ Using addiitonal sample information from our metadata, we can use plots to compa
 boxplot(samplemeans~celltype, df)
 ```
 
-![plot of chunk boxplot](img/r-lesson-boxplot-1.png) 
+<img src="figure/boxplot-1.png" title="plot of chunk boxplot" alt="plot of chunk boxplot" style="display: block; margin: auto;" />
 
-Similar to the plots aboev, we can pass in arguments to add in extras like plot title, axis labels and colors.
+Similar to the plots above, we can pass in arguments to add in extras like plot title, axis labels and colors.
 
 
 ```r
@@ -193,5 +204,5 @@ boxplot(samplemeans~celltype, df,  col=c("blue","red"),
         main="Average expression differences between celltypes", ylab="Expression")
 ```
 
-![plot of chunk unnamed-chunk-13](img/r-lesson-unnamed-chunk-13-1.png) 
+<img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
 

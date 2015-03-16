@@ -1,11 +1,10 @@
-------
+---
 layout: topic
 title: Analyzing and Plotting Data
 minutes: 60
 ---
 
-```{r, echo=FALSE, purl=FALSE}
-knitr::opts_chunk$set(results='hide', fig.path='img/r-lesson-')
+```{r, echo=FALSE}
 load('snapshots/re-organizing-data.RData')
 ```
 
@@ -16,7 +15,7 @@ load('snapshots/re-organizing-data.RData')
 > * Basic plots using RNA-Seq data: scatter plots, boxplots, histograms (base functions)
 > * Introducing ggplot2: scatter plots, boxplots, histograms (base functions)
 > * Advanced plots: correlation heat map ,scatterplot, PCA, histogram of average values
-> * Writing to file
+> * Writing images (and other things) to file
 > * Not covered: working with missing values? unique?
 
 
@@ -51,13 +50,12 @@ In some cases, it might be useful to remove the missing data from the vector. Fo
 
 ```{r}
 rpkm_noNA <- annotated_rpkm[complete.cases(annotated_rpkm), ]
-dim(rpkm_noNA)
 ```
 
 > ### Challenge {.challenge}
-> Can you compute the [standard error](http://en.wikipedia.org/wiki/Standard_error) for "sample1". (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)
+> Compute the [standard error](http://en.wikipedia.org/wiki/Standard_error) for "sample1". (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)
 
-## The Apply Function
+## The apply Function
 To obtain mean values for all samples we can use `mean` on each column individually, but there is also an easier way to go about it. The `apply` family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.
 
 ```{r, eval=FALSE}
@@ -92,63 +90,70 @@ df <- cbind(metadata, samplemeans)
 
 Let's start with a **scatterplot**. A scatter plot provides a graphical view of the relationship between two sets of numbers. We don't have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their index values just to demonstrate the function.
 
-```{r}
+```{r scatter-plot1, fig.align='center'}
 plot(samplemeans)
 ```
 
 Each point represents a sample and the value on the x-axis is the sample number, where the values on the y-axis correspond to the average expression for that sample. For any plot you can customize many features of your graphs (fonts, colors, axes, titles) through [graphic options](http://www.statmethods.net/advgraphs/parameters.html)
 For this scatterplot we'll add a title to the plot with `main` in addition to changing the shape of the data point using `pch`.
 
-```{r}
+```{r, fig.align='center'}
 plot(samplemeans, pch=8)
 plot(samplemeans, pch=8, main="Scatter plot of mean values")
 ```
 
 In the case of our data, a **barplot**  would be much more useful. We can use `barplot` to draw a single bar representing each sample and the height indicates the average expression level. 
 
-```{r}
+```{r, fig.align='center'}
 barplot(samplemeans)
 ```
 
-The sample names appear to be too large for the plot, we can change that by changing the `cex.names` value. Alternatively we can also just change the names to be numeric values and keep the same size.
+The sample names appear to be too large for the plot, we can change that by changing the `cex.names` value. 
 
-```{r}
+```{r, fig.align='center'}
 barplot(samplemeans, cex.names=0.5)
+```
+
+The names are too small to read. Alternatively we can also just change the names to be numeric values and keep the same size.
+
+```{r, fig.align='center'}
 barplot(samplemeans, names.arg=c(1:12)) # supply numbers as labels
 ```
 
 We can also flip the axes so that the plot is projected horizontally.
 
-```{r}
+```{r, fig.align='center'}
 barplot(samplemeans, names.arg=c(1:12), horiz=TRUE) 
 ```
 
 If we are interested in an overall distribution of values, **histogram** is a plot very commonly used. It plots the frequencies that data appears within certain ranges. To plot a histogram of the data use the `hist` command:
 
-```{r}
+```{r, fig.align='center'}
 hist(samplemeans)
 ```
+
 The range of values for sample means is 22 to 39. As you can see R will automatically calculate the intervals to use. There are many options to determine how to break up the intervals. Let's increase the number of breaks to see how that changes the plot:
 
-```{r hist}
+```{r hist, fig.align='center'}
 hist(samplemeans, xlab="Mean expression level", main="", breaks=20) 
 ```
 
 Similar to the other plots we can tweak the aesthetics. Let's color in the bar and remove the borders:
-```{r}
+
+```{r, fig.align='center'}
 hist(samplemeans, xlab="Mean expression level", main="", col="darkgrey", border=FALSE) 
 ```
 
 Using addiitonal sample information from our metadata, we can use plots to compare values between the two different celltypes 'typeA' and 'typeB' using a **boxplot**. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set. 
 
-```{r boxplot}
+```{r boxplot, fig.align='center'}
 # Boxplot
 boxplot(samplemeans~celltype, df)
 ```
 
-Similar to the plots aboev, we can pass in arguments to add in extras like plot title, axis labels and colors.
+Similar to the plots above, we can pass in arguments to add in extras like plot title, axis labels and colors.
 
-```{r}
+```{r, fig.align='center'}
 boxplot(samplemeans~celltype, df,  col=c("blue","red"),
         main="Average expression differences between celltypes", ylab="Expression")
 ```

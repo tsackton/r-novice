@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="generator" content="pandoc">
-    <title>Software Carpentry: </title>
+    <title>Software Carpentry: Analyzing and Plotting Data</title>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.css" />
@@ -24,21 +24,8 @@
       </div>
       <div class="row">
         <div class="col-md-10 col-md-offset-1">
-          <h1 class="title"></h1>
+          <h1 class="title">Analyzing and Plotting Data</h1>
           
-<table>
-<tbody>
-<tr class="odd">
-<td align="left">layout: topic</td>
-</tr>
-<tr class="even">
-<td align="left">title: Analyzing and Plotting Data</td>
-</tr>
-<tr class="odd">
-<td align="left">minutes: 60</td>
-</tr>
-</tbody>
-</table>
 <div id="learning-objectives" class="objectives">
 <h2>Learning Objectives</h2>
 <ul>
@@ -47,7 +34,7 @@
 <li>Basic plots using RNA-Seq data: scatter plots, boxplots, histograms (base functions)</li>
 <li>Introducing ggplot2: scatter plots, boxplots, histograms (base functions)</li>
 <li>Advanced plots: correlation heat map ,scatterplot, PCA, histogram of average values</li>
-<li>Writing to file</li>
+<li>Writing images (and other things) to file</li>
 <li>Not covered: working with missing values? unique?</li>
 </ul>
 </div>
@@ -65,13 +52,12 @@
 <span class="co"># Minimum</span>
 <span class="kw">min</span>(annotated_rpkm[,<span class="st">&#39;sample1&#39;</span>], <span class="dt">na.rm=</span>T)</code></pre>
 <p>In some cases, it might be useful to remove the missing data from the vector. For this purpose, R comes with the function <code>na.omit</code> to generate a vector that has NA's removed. For some applications, it's useful to keep all observations, for others, it might be best to remove all observations that contain missing data. The function <code>complete.cases()</code> returns a logical vector indicating which rows have no missing values. We can use the logical vector to remove rows that contain at least one missing observation. If we do this on our data, how many rows are we left with?</p>
-<pre class="sourceCode r"><code class="sourceCode r">rpkm_noNA &lt;-<span class="st"> </span>annotated_rpkm[<span class="kw">complete.cases</span>(annotated_rpkm), ]
-<span class="kw">dim</span>(rpkm_noNA)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">rpkm_noNA &lt;-<span class="st"> </span>annotated_rpkm[<span class="kw">complete.cases</span>(annotated_rpkm), ]</code></pre>
 <div id="challenge" class="challenge">
 <h3>Challenge</h3>
-<p>Can you compute the <a href="http://en.wikipedia.org/wiki/Standard_error">standard error</a> for &quot;sample1&quot;. (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)</p>
+<p>Compute the <a href="http://en.wikipedia.org/wiki/Standard_error">standard error</a> for &quot;sample1&quot;. (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)</p>
 </div>
-<h2 id="the-apply-function">The Apply Function</h2>
+<h2 id="the-apply-function">The apply Function</h2>
 <p>To obtain mean values for all samples we can use <code>mean</code> on each column individually, but there is also an easier way to go about it. The <code>apply</code> family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.</p>
 <pre class="sourceCode r"><code class="sourceCode r">base::apply             Apply Functions Over Array Margins
 base::by                Apply a Function to a Data Frame Split by Factors
@@ -87,65 +73,46 @@ base::tapply            Apply a Function Over a Ragged Array</code></pre>
 <p>The mathematician Richard Hamming once said, &quot;The purpose of computing is insight, not numbers&quot;, and the best way to develop insight is often to visualize data. Visualization deserves an entire lecture (or course) of its own, but we can explore a few features of R's base plotting package.</p>
 <p>When we are working with large sets of numbers it can be useful to display that information graphically. R has a number of built-in tools for basic graph types such as hisotgrams, scatter plots, bar charts, boxplots and much <a href="http://www.statmethods.net/graphs/">more</a>. We'll test a few of these out here on our <code>samplemeans</code> vector, but first we will create a combined data frame that maps our metadata to the sample mean values.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a combined data frame</span>
-<span class="kw">all</span>(<span class="kw">rownames</span>(metadata) ==<span class="st"> </span><span class="kw">names</span>(samplemeans)) <span class="co"># sanity check for sample order</span>
-df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplemeans) </code></pre>
+<span class="kw">all</span>(<span class="kw">rownames</span>(metadata) ==<span class="st"> </span><span class="kw">names</span>(samplemeans)) <span class="co"># sanity check for sample order</span></code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplemeans) </code></pre>
 <p>Let's start with a <strong>scatterplot</strong>. A scatter plot provides a graphical view of the relationship between two sets of numbers. We don't have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their index values just to demonstrate the function.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans)</code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6" /><p class="caption">plot of chunk unnamed-chunk-6</p>
-</div>
+<p><img src="figure/scatter-plot1-1.png" title="plot of chunk scatter-plot1" alt="plot of chunk scatter-plot1" style="display: block; margin: auto;" /></p>
 <p>Each point represents a sample and the value on the x-axis is the sample number, where the values on the y-axis correspond to the average expression for that sample. For any plot you can customize many features of your graphs (fonts, colors, axes, titles) through <a href="http://www.statmethods.net/advgraphs/parameters.html">graphic options</a> For this scatterplot we'll add a title to the plot with <code>main</code> in addition to changing the shape of the data point using <code>pch</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>)</code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7" /><p class="caption">plot of chunk unnamed-chunk-7</p>
-</div>
+<p><img src="figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>, <span class="dt">main=</span><span class="st">&quot;Scatter plot of mean values&quot;</span>)</code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-7-2.png" alt="plot of chunk unnamed-chunk-7" /><p class="caption">plot of chunk unnamed-chunk-7</p>
-</div>
+<p><img src="figure/unnamed-chunk-6-2.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
 <p>In the case of our data, a <strong>barplot</strong> would be much more useful. We can use <code>barplot</code> to draw a single bar representing each sample and the height indicates the average expression level.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans)</code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-8-1.png" alt="plot of chunk unnamed-chunk-8" /><p class="caption">plot of chunk unnamed-chunk-8</p>
-</div>
-<p>The sample names appear to be too large for the plot, we can change that by changing the <code>cex.names</code> value. Alternatively we can also just change the names to be numeric values and keep the same size.</p>
+<p><img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" /></p>
+<p>The sample names appear to be too large for the plot, we can change that by changing the <code>cex.names</code> value.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">cex.names=</span><span class="fl">0.5</span>)</code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-9-1.png" alt="plot of chunk unnamed-chunk-9" /><p class="caption">plot of chunk unnamed-chunk-9</p>
-</div>
+<p><img src="figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" /></p>
+<p>The names are too small to read. Alternatively we can also just change the names to be numeric values and keep the same size.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">names.arg=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">12</span>)) <span class="co"># supply numbers as labels</span></code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-9-2.png" alt="plot of chunk unnamed-chunk-9" /><p class="caption">plot of chunk unnamed-chunk-9</p>
-</div>
+<p><img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" /></p>
 <p>We can also flip the axes so that the plot is projected horizontally.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">names.arg=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">12</span>), <span class="dt">horiz=</span><span class="ot">TRUE</span>) </code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-10-1.png" alt="plot of chunk unnamed-chunk-10" /><p class="caption">plot of chunk unnamed-chunk-10</p>
-</div>
+<p><img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" /></p>
 <p>If we are interested in an overall distribution of values, <strong>histogram</strong> is a plot very commonly used. It plots the frequencies that data appears within certain ranges. To plot a histogram of the data use the <code>hist</code> command:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans)</code></pre>
-<p><img src="img/r-lesson-unnamed-chunk-11-1.png" alt="plot of chunk unnamed-chunk-11" /> The range of values for sample means is 22 to 39. As you can see R will automatically calculate the intervals to use. There are many options to determine how to break up the intervals. Let's increase the number of breaks to see how that changes the plot:</p>
+<p><img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" /></p>
+<p>The range of values for sample means is 22 to 39. As you can see R will automatically calculate the intervals to use. There are many options to determine how to break up the intervals. Let's increase the number of breaks to see how that changes the plot:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans, <span class="dt">xlab=</span><span class="st">&quot;Mean expression level&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">breaks=</span><span class="dv">20</span>) </code></pre>
-<div class="figure">
-<img src="img/r-lesson-hist-1.png" alt="plot of chunk hist" /><p class="caption">plot of chunk hist</p>
-</div>
+<p><img src="figure/hist-1.png" title="plot of chunk hist" alt="plot of chunk hist" style="display: block; margin: auto;" /></p>
 <p>Similar to the other plots we can tweak the aesthetics. Let's color in the bar and remove the borders:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans, <span class="dt">xlab=</span><span class="st">&quot;Mean expression level&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">col=</span><span class="st">&quot;darkgrey&quot;</span>, <span class="dt">border=</span><span class="ot">FALSE</span>) </code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-12-1.png" alt="plot of chunk unnamed-chunk-12" /><p class="caption">plot of chunk unnamed-chunk-12</p>
-</div>
+<p><img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" /></p>
 <p>Using addiitonal sample information from our metadata, we can use plots to compare values between the two different celltypes 'typeA' and 'typeB' using a <strong>boxplot</strong>. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Boxplot</span>
 <span class="kw">boxplot</span>(samplemeans~celltype, df)</code></pre>
-<div class="figure">
-<img src="img/r-lesson-boxplot-1.png" alt="plot of chunk boxplot" /><p class="caption">plot of chunk boxplot</p>
-</div>
-<p>Similar to the plots aboev, we can pass in arguments to add in extras like plot title, axis labels and colors.</p>
+<p><img src="figure/boxplot-1.png" title="plot of chunk boxplot" alt="plot of chunk boxplot" style="display: block; margin: auto;" /></p>
+<p>Similar to the plots above, we can pass in arguments to add in extras like plot title, axis labels and colors.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(samplemeans~celltype, df,  <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;red&quot;</span>),
         <span class="dt">main=</span><span class="st">&quot;Average expression differences between celltypes&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Expression&quot;</span>)</code></pre>
-<div class="figure">
-<img src="img/r-lesson-unnamed-chunk-13-1.png" alt="plot of chunk unnamed-chunk-13" /><p class="caption">plot of chunk unnamed-chunk-13</p>
-</div>
+<p><img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" /></p>
         </div>
       </div>
       <div class="footer">
