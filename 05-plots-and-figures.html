@@ -29,13 +29,10 @@
 <div id="learning-objectives" class="objectives">
 <h2>Learning Objectives</h2>
 <ul>
-<li>Generating simple statistics from the data (across levels of a factor)</li>
-<li>A few basic plots using mock data</li>
-<li>Basic plots using RNA-Seq data: scatter plots, boxplots, histograms (base functions)</li>
-<li>Introducing ggplot2: scatter plots, boxplots, histograms (base functions)</li>
-<li>Advanced plots: correlation heat map ,scatterplot, PCA, histogram of average values</li>
+<li>Generating simple statistics</li>
+<li>Basic plots</li>
+<li>Advanced plots (introducing ggplot)</li>
 <li>Writing images (and other things) to file</li>
-<li>Not covered: working with missing values? unique?</li>
 </ul>
 </div>
 <h1 id="calculating-statistics">Calculating statistics</h1>
@@ -57,7 +54,7 @@
 <h3>Challenge</h3>
 <p>Compute the <a href="http://en.wikipedia.org/wiki/Standard_error">standard error</a> for &quot;sample1&quot;. (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)</p>
 </div>
-<h2 id="the-apply-function">The apply Function</h2>
+<h2 id="the-apply-function">The <code>apply</code> Function</h2>
 <p>To obtain mean values for all samples we can use <code>mean</code> on each column individually, but there is also an easier way to go about it. The <code>apply</code> family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.</p>
 <pre class="sourceCode r"><code class="sourceCode r">base::apply             Apply Functions Over Array Margins
 base::by                Apply a Function to a Data Frame Split by Factors
@@ -76,6 +73,7 @@ base::tapply            Apply a Function Over a Ragged Array</code></pre>
 <span class="kw">all</span>(<span class="kw">rownames</span>(metadata) ==<span class="st"> </span><span class="kw">names</span>(samplemeans)) <span class="co"># sanity check for sample order</span></code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplemeans) </code></pre>
+<h2 id="scatterplot">Scatterplot</h2>
 <p>Let's start with a <strong>scatterplot</strong>. A scatter plot provides a graphical view of the relationship between two sets of numbers. We don't have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their index values just to demonstrate the function.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans)</code></pre>
 <p><img src="figure/scatter-plot1-1.png" title="plot of chunk scatter-plot1" alt="plot of chunk scatter-plot1" style="display: block; margin: auto;" /></p>
@@ -84,6 +82,7 @@ base::tapply            Apply a Function Over a Ragged Array</code></pre>
 <p><img src="figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>, <span class="dt">main=</span><span class="st">&quot;Scatter plot of mean values&quot;</span>)</code></pre>
 <p><img src="figure/unnamed-chunk-6-2.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" /></p>
+<h2 id="barplot">Barplot</h2>
 <p>In the case of our data, a <strong>barplot</strong> would be much more useful. We can use <code>barplot</code> to draw a single bar representing each sample and the height indicates the average expression level.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans)</code></pre>
 <p><img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" /></p>
@@ -96,6 +95,7 @@ base::tapply            Apply a Function Over a Ragged Array</code></pre>
 <p>We can also flip the axes so that the plot is projected horizontally.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">names.arg=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">12</span>), <span class="dt">horiz=</span><span class="ot">TRUE</span>) </code></pre>
 <p><img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" /></p>
+<h2 id="histogram">Histogram</h2>
 <p>If we are interested in an overall distribution of values, <strong>histogram</strong> is a plot very commonly used. It plots the frequencies that data appears within certain ranges. To plot a histogram of the data use the <code>hist</code> command:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans)</code></pre>
 <p><img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" /></p>
@@ -105,6 +105,7 @@ base::tapply            Apply a Function Over a Ragged Array</code></pre>
 <p>Similar to the other plots we can tweak the aesthetics. Let's color in the bar and remove the borders:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans, <span class="dt">xlab=</span><span class="st">&quot;Mean expression level&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">col=</span><span class="st">&quot;darkgrey&quot;</span>, <span class="dt">border=</span><span class="ot">FALSE</span>) </code></pre>
 <p><img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" /></p>
+<h2 id="boxplot">Boxplot</h2>
 <p>Using addiitonal sample information from our metadata, we can use plots to compare values between the two different celltypes 'typeA' and 'typeB' using a <strong>boxplot</strong>. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Boxplot</span>
 <span class="kw">boxplot</span>(samplemeans~celltype, df)</code></pre>
@@ -113,6 +114,66 @@ base::tapply            Apply a Function Over a Ragged Array</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(samplemeans~celltype, df,  <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;red&quot;</span>),
         <span class="dt">main=</span><span class="st">&quot;Average expression differences between celltypes&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Expression&quot;</span>)</code></pre>
 <p><img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" /></p>
+<div id="challenge-1" class="challenge">
+<h3>Challenge</h3>
+</div>
+<h1 id="advanced-figures-ggplot2">Advanced figures (<code>ggplot2</code>)</h1>
+<p>There's also a plotting package called <a href="http://docs.ggplot2.org/"><code>ggplot2</code></a> that adds a lot of functionality to the basic plots seen above. The syntax takes some getting used to but it's extremely powerful and flexible. We can start by re-creating some of the above plots but using ggplot functions to get a feel for the syntax.</p>
+<p><code>ggplot</code> is best used on data in the <code>data.frame</code> form, so we will will work with our combined <code>df</code> for the following figures. Let's start by loading the <code>ggplot2</code> library.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)</code></pre>
+<h2 id="boxplot-1">Boxplot</h2>
+<p>The <code>ggplot()</code> command creates a plot object. In it we assign our data frame to the <code>data</code> argument, and <code>aes()</code> creates what Hadley Wickham calls an aesthetic: a mapping of variables to various parts of the plot. Note that ggplot functions can be chained with <code>+</code> signs to adding layers to the final plot. The next in chain is <code>geom_boxplot()</code>. The <code>geom</code> function specifies the geometric objects that define the graph type. The geom option is expressed as a character vector with one or more entries. Values include <code>geom_point</code>, <code>geom_boxplot</code>, <code>geom_line</code> etc</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>() </code></pre>
+<p><img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" /></p>
+<p>Now let's add in some more features to the boxplot. In the <code>aes()</code> we can specify the color of the boxes by adding in a <code>fill</code> value. If we add in We can also chain in additional functions to include titles for the axes and the plot area.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Genotype differences in average gene expression&#39;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;Genotype&#39;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&#39;Mean expression&#39;</span>) </code></pre>
+<p><img src="figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" /></p>
+<p>Unlike base R graphs, the ggplot graphs are not effected by many of the options set in the <code>par()</code> function (e.g. adjusting relative size of axis labels usin <code>cex</code>). They can be modified using the <code>theme()</code> function, and by adding graphic parameters. Here, we will increase the size of the axis lables and the main title. We can also change the <code>fill</code> variable to <code>celltype</code> - how does this change the plot? What if you switch <code>genotype</code> with <code>celltype</code> in the aeshetics argument. How will that chaneg the figure?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>celltype)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Genotype differences in average gene expression&#39;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;Genotype&#39;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&#39;Mean expression&#39;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">2.0</span>)),
+        <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.5</span>)),
+        <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))</code></pre>
+<p><img src="figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" style="display: block; margin: auto;" /></p>
+<h2 id="barplot-1">Barplot</h2>
+<p>For the barplot, we need to define the graph type to <code>geom_bar</code>. Since we don't have an x variable, we need to specify the row names as our index so each sample is plotted on its own. For <code>fill</code> you can use <code>genotype</code> or <code>celltype</code> and see how the plot changes. Can you determine how we got the axis labels on an angle?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">row.names</span>(df), <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">colour=</span><span class="st">&quot;black&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Average expression for each sample&#39;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;&#39;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&#39;Mean expression&#39;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">2.0</span>)),
+        <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.5</span>)),
+        <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">45</span>, <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.6</span>, <span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))</code></pre>
+<p><img src="figure/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" style="display: block; margin: auto;" /></p>
+<div id="challenge-2" class="challenge">
+<h3>Challenge</h3>
+<p>The previous challenge asked you to compute the standard error for &quot;sample1&quot;. Using the <code>apply</code> function generate a vector of standard error values for each sample. The use the code provided below to add error bars to your barplot.</p>
+</div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymax=</span>upper, <span class="dt">ymin=</span>lower), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">data=</span>means.sem)</code></pre>
+<h2 id="writing-figures-to-file">Writing figures to file</h2>
+<p>There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on <code>Export</code> when the image is plotted. This will give you the option of <code>png</code> or <code>pdf</code> and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include <code>pdf()</code>, <code>png</code>.</p>
+<p>Initialize a plot that will be written directly to a file using <code>pdf</code>, <code>png</code> etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the <code>dev.off()</code> function. There are also <code>bmp</code>, <code>tiff</code>, and <code>jpeg</code> functions, though the jpeg function has proven less stable than the others.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pdf</span>(<span class="st">&quot;figure/barplot.pdf&quot;</span>)
+<span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">row.names</span>(df), <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">colour=</span><span class="st">&quot;black&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Average expression for each sample&#39;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;&#39;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&#39;Mean expression&#39;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">2.0</span>)),
+        <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.5</span>)),
+        <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">45</span>, <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.6</span>, <span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))
+<span class="kw">dev.off</span>()</code></pre>
         </div>
       </div>
       <div class="footer">

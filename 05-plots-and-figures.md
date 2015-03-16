@@ -8,14 +8,10 @@ minutes: 60
 
 > ## Learning Objectives {.objectives}
 >
-> * Generating simple statistics from the data (across levels of a factor)
-> * A few basic plots using mock data
-> * Basic plots using RNA-Seq data: scatter plots, boxplots, histograms (base functions)
-> * Introducing ggplot2: scatter plots, boxplots, histograms (base functions)
-> * Advanced plots: correlation heat map ,scatterplot, PCA, histogram of average values
+> * Generating simple statistics 
+> * Basic plots 
+> * Advanced plots (introducing ggplot)
 > * Writing images (and other things) to file
-> * Not covered: working with missing values? unique?
-
 
 
 # Calculating statistics
@@ -55,7 +51,7 @@ rpkm_noNA <- annotated_rpkm[complete.cases(annotated_rpkm), ]
 > ### Challenge {.challenge}
 > Compute the [standard error](http://en.wikipedia.org/wiki/Standard_error) for "sample1". (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)
 
-## The apply Function
+## The `apply` Function
 To obtain mean values for all samples we can use `mean` on each column individually, but there is also an easier way to go about it. The `apply` family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.
 
 
@@ -98,6 +94,7 @@ all(rownames(metadata) == names(samplemeans)) # sanity check for sample order
 df <- cbind(metadata, samplemeans) 
 ```
 
+## Scatterplot
 Let's start with a **scatterplot**. A scatter plot provides a graphical view of the relationship between two sets of numbers. We don't have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their index values just to demonstrate the function.
 
 
@@ -123,6 +120,7 @@ plot(samplemeans, pch=8, main="Scatter plot of mean values")
 
 <img src="figure/unnamed-chunk-6-2.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" />
 
+## Barplot
 In the case of our data, a **barplot**  would be much more useful. We can use `barplot` to draw a single bar representing each sample and the height indicates the average expression level. 
 
 
@@ -159,6 +157,7 @@ barplot(samplemeans, names.arg=c(1:12), horiz=TRUE)
 
 <img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
 
+## Histogram
 If we are interested in an overall distribution of values, **histogram** is a plot very commonly used. It plots the frequencies that data appears within certain ranges. To plot a histogram of the data use the `hist` command:
 
 
@@ -186,6 +185,8 @@ hist(samplemeans, xlab="Mean expression level", main="", col="darkgrey", border=
 
 <img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
 
+##Boxplot
+
 Using addiitonal sample information from our metadata, we can use plots to compare values between the two different celltypes 'typeA' and 'typeB' using a **boxplot**. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set. 
 
 
@@ -205,4 +206,109 @@ boxplot(samplemeans~celltype, df,  col=c("blue","red"),
 ```
 
 <img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
+
+> ### Challenge {.challenge}
+>
+
+# Advanced figures (`ggplot2`)
+
+There's also a plotting package called [`ggplot2`](http://docs.ggplot2.org/) that adds a lot of functionality to the basic plots seen above. The syntax takes some getting used to but it's extremely powerful and flexible. We can start by re-creating some of the above plots but using ggplot functions to get a feel for the syntax.
+
+`ggplot` is best used on data in the `data.frame` form, so we will will work with our combined `df` for the following figures. Let's start by loading the `ggplot2` library.
+
+
+```r
+library(ggplot2)
+```
+
+
+## Boxplot 
+
+The `ggplot()` command creates a plot object. In it we assign our data frame to the `data` argument, and `aes()` creates what Hadley Wickham calls an aesthetic: a mapping of variables to various parts of the plot. Note that ggplot functions can be chained with `+` signs to adding layers to the final plot. The next in chain is `geom_boxplot()`. The `geom` function specifies the geometric objects that define the graph type. The geom option is expressed as a character vector with one or more entries. Values include `geom_point`, `geom_boxplot`, `geom_line` etc
+
+
+```r
+ggplot(data=df, aes(x= genotype, y=samplemeans)) + 
+  geom_boxplot() 
+```
+
+<img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
+
+Now let's add in some more features to the boxplot. In the `aes()` we can specify the color of the boxes by adding in a `fill` value. If we add in We can also chain in additional functions to include titles for the axes and the plot area.
+
+
+```r
+ggplot(data=df, aes(x= genotype, y=samplemeans, fill=genotype)) + 
+  geom_boxplot() + 
+  ggtitle('Genotype differences in average gene expression') +
+  xlab('Genotype') +
+  ylab('Mean expression') 
+```
+
+<img src="figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" />
+
+Unlike base R graphs, the ggplot graphs are not effected by many of the options set in the `par()` function (e.g. adjusting relative size of axis labels usin `cex`). They can be modified using the `theme()` function, and by adding graphic parameters. Here, we will increase the size of the axis lables and the main title. We can also change the `fill` variable to `celltype` - how does this change the plot? What if you switch `genotype` with `celltype` in the aeshetics argument. How will that chaneg the figure? 
+
+
+```r
+ggplot(data=df, aes(x= genotype, y=samplemeans, fill=celltype)) + 
+  geom_boxplot() + 
+  ggtitle('Genotype differences in average gene expression') +
+  xlab('Genotype') +
+  ylab('Mean expression') +
+  theme(plot.title = element_text(size = rel(2.0)),
+        axis.title = element_text(size = rel(1.5)),
+        axis.text = element_text(size = rel(1.25)))
+```
+
+<img src="figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" style="display: block; margin: auto;" />
+
+## Barplot
+For the barplot, we need to define the graph type to `geom_bar`. Since we don't have an x variable, we need to specify the row names as our index so each sample is plotted on its own. For `fill` you can use `genotype` or `celltype` and see how the plot changes. Can you determine how we got the axis labels on an angle?
+
+
+```r
+ggplot(data=df, aes(x=row.names(df), y=samplemeans, fill=genotype)) +
+  geom_bar(colour="black", stat="identity") +
+  ggtitle('Average expression for each sample') +
+  xlab('') +
+  ylab('Mean expression') +
+  theme(plot.title = element_text(size = rel(2.0)),
+        axis.title = element_text(size = rel(1.5)),
+        axis.text = element_text(size = rel(1.25)),
+        axis.text.x = element_text(angle=45, vjust=0.5, hjust=0.6, size = rel(1.25)))
+```
+
+<img src="figure/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" style="display: block; margin: auto;" />
+
+> ### Challenge {.challenge}
+> The previous challenge asked you to compute the standard error for "sample1". Using the `apply` function generate a vector of standard error values for each sample. The use the code provided below to add error bars to your barplot.
+
+
+```r
+geom_errorbar(aes(ymax=upper, ymin=lower), position=position_dodge(0.9), data=means.sem)
+```
+
+## Writing figures to file
+
+There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on `Export` when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png`.
+
+Initialize a plot that will be written directly to a file using `pdf`, `png` etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the `dev.off()` function. There are also `bmp`, `tiff`, and `jpeg` functions, though the jpeg function has proven less stable than the others.
+
+
+
+```r
+pdf("figure/barplot.pdf")
+ggplot(data=df, aes(x=row.names(df), y=samplemeans, fill=genotype)) +
+  geom_bar(colour="black", stat="identity") +
+  ggtitle('Average expression for each sample') +
+  xlab('') +
+  ylab('Mean expression') +
+  theme(plot.title = element_text(size = rel(2.0)),
+        axis.title = element_text(size = rel(1.5)),
+        axis.text = element_text(size = rel(1.25)),
+        axis.text.x = element_text(angle=45, vjust=0.5, hjust=0.6, size = rel(1.25)))
+dev.off()
+```
+
 
