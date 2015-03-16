@@ -116,6 +116,7 @@ df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplem
 <p><img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" /></p>
 <div id="challenge-1" class="challenge">
 <h3>Challenge</h3>
+<p>The previous challenge asked you to compute the standard error for &quot;sample1&quot;. Using the <code>apply</code> function to generate a vector of standard error values for each sample. Use a boxplot to illustrate the differences in standard error between WT and KO samples.</p>
 </div>
 <h1 id="advanced-figures-ggplot2">Advanced figures (<code>ggplot2</code>)</h1>
 <p>There's also a plotting package called <a href="http://docs.ggplot2.org/"><code>ggplot2</code></a> that adds a lot of functionality to the basic plots seen above. The syntax takes some getting used to but it's extremely powerful and flexible. We can start by re-creating some of the above plots but using ggplot functions to get a feel for the syntax.</p>
@@ -155,11 +156,6 @@ df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplem
         <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)),
         <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">45</span>, <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.6</span>, <span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))</code></pre>
 <p><img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" /></p>
-<div id="challenge-2" class="challenge">
-<h3>Challenge</h3>
-<p>The previous challenge asked you to compute the standard error for &quot;sample1&quot;. Using the <code>apply</code> function generate a vector of standard error values for each sample. The use the code provided below to add error bars to your barplot.</p>
-</div>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymax=</span>upper, <span class="dt">ymin=</span>lower), <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="fl">0.9</span>), <span class="dt">data=</span>means.sem)</code></pre>
 <h1 id="more-advanced-figures-optional">More advanced figures (optional)</h1>
 <p>A figure that is often used in exploratory analsyis of data is PCA plot. PCA (principal components analysis) is a multivariate technique that allows us to summarize the systematic patterns of variations in the data. PCA takes the expresson levels for all probes and transforms it in principal component space, reducing each sample into one point (as coordinates within that space). This allows us to separate samples according to expression variation, and identify potential outliers.</p>
 <h2 id="pca">PCA</h2>
@@ -181,7 +177,7 @@ pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span c
 <span class="st">  </span><span class="kw">geom_point</span>() +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(PC1, PC2, <span class="dt">label =</span> <span class="kw">row.names</span>(df)), <span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">hjust=</span><span class="fl">0.1</span>, <span class="dt">vjust=</span><span class="fl">0.1</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="fl">0.3</span>,  <span class="fl">0.3</span>))</code></pre>
-<p><img src="figure/unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" style="display: block; margin: auto;" /></p>
+<p><img src="figure/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" /></p>
 <p>We have only scratched the surface here. To learn more, see the <a href="http://docs.ggplot2.org/">ggplot reference site</a>, and Winston Chang's excellent <a href="http://wiki.stdout.org/rcookbook/Graphs/">Cookbook for R</a> site. Though slightly out of date, <a href="http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403">ggplot2: Elegant Graphics for Data Anaysis</a> is still the definative book on this subject.</p>
 <h2 id="heatmaps">Heatmaps</h2>
 <p>Another useful plot used to identify patterns in your data and potential outliers is to use heatmaps. A <strong>heatmap</strong> is a graphical representation of data where the individual values contained in a matrix are represented as colors. Heat maps are well-suited for visualizing large amounts of multi-dimensional data and can be used to identify clusters of rows or columns with similar values, as these are displayed as areas of similar color.</p>
@@ -197,8 +193,14 @@ pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span c
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap.2</span>(cor_mat, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">Colv=</span><span class="ot">NULL</span>, <span class="dt">dendrogram=</span><span class="st">&quot;row&quot;</span>, <span class="dt">key=</span><span class="ot">FALSE</span>)</code></pre>
 <p><img src="figure/heatmap-new-1.png" title="plot of chunk heatmap-new" alt="plot of chunk heatmap-new" style="display: block; margin: auto;" /></p>
 <p>As with any function in R, there are many way in which we can tweak arguments to customize the heatmap. We encourage you take time to read through the reference manual and explore other ways of generating heatmaps in R (<em>hint: ggplot also does heatmaps!</em>)</p>
-<div id="challenge-3" class="challenge">
+<div id="challenge-2" class="challenge">
 <h3>Challenge</h3>
+<p>Throughout this session we have mainly been working with the RPKM data file. Start a new R session (clear your environment) and load in your counts file <code>data/combined.counts</code> and your metadata file. Using the count data matrix you will:</p>
+<ol style="list-style-type: decimal">
+<li>Generate a vector of sample means</li>
+<li>Create a boxplot to show the differences between WT and KO samples Bonus: Try generating a heatmap with the count matris and changing the color palette from default.</li>
+</ol>
+<p><em>NOTE: Keep in mind that the count matrix does not have gene symbols in it nor does it contain <code>NA</code> values. This will change the way you treat the data before running your functions</em></p>
 </div>
 <h2 id="writing-figures-to-file">Writing figures to file</h2>
 <p>There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on <code>Export</code> when the image is plotted. This will give you the option of <code>png</code> or <code>pdf</code> and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate x<code>the size and resolution of the output image. Some of the more popular formats include</code>pdf()<code>,</code>png`.</p>

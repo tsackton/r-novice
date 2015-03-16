@@ -205,7 +205,7 @@ boxplot(samplemeans~celltype, df,  col=c("blue","red"),
 <img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
 
 > ### Challenge {.challenge}
->
+> The previous challenge asked you to compute the standard error for "sample1". Using the `apply` function to generate a vector of standard error values for each sample. Use a boxplot to illustrate the differences in standard error between WT and KO samples. 
 
 # Advanced figures (`ggplot2`)
 
@@ -278,13 +278,6 @@ ggplot(data=df, aes(x=row.names(df), y=samplemeans, fill=genotype)) +
 
 <img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
 
-> ### Challenge {.challenge}
-> The previous challenge asked you to compute the standard error for "sample1". Using the `apply` function generate a vector of standard error values for each sample. The use the code provided below to add error bars to your barplot.
-
-
-```r
-geom_errorbar(aes(ymax=upper, ymin=lower), position=position_dodge(0.9), data=means.sem)
-```
 
 # More advanced figures (optional)
 
@@ -337,8 +330,7 @@ ggplot(df, aes(PC1, PC2, label = row.names(df), color = genotype)) +
   scale_x_continuous(expand = c(0.3,  0.3))
 ```
 
-<img src="figure/unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" style="display: block; margin: auto;" />
-
+<img src="figure/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" />
 
 We have only scratched the surface here. To learn more, see the [ggplot reference site](http://docs.ggplot2.org/), and Winston Chang's excellent [Cookbook for R](http://wiki.stdout.org/rcookbook/Graphs/) site. Though slightly out of date, [ggplot2: Elegant Graphics for Data Anaysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) is still the definative book on this subject.
 
@@ -382,8 +374,13 @@ heatmap.2(cor_mat, trace="none", Colv=NULL, dendrogram="row", key=FALSE)
 As with any function in R, there are many way in which we can tweak arguments to customize the heatmap. We encourage you take time to read through the reference manual and explore other ways of generating heatmaps in R (_hint: ggplot also does heatmaps!_)
 
 > ### Challenge {.challenge}
+> Throughout this session we have mainly been working with the RPKM data file. Start a new R session (clear your environment) and load in your counts file `data/combined.counts` and your metadata file. Using the count data matrix you will:
 >
+> 1. Generate a vector of sample means
+> 2. Create a boxplot to show the differences between WT and KO samples
+> Bonus: Try generating a heatmap with the count matris and changing the color palette from default.
 >
+> _NOTE: Keep in mind that the count matrix does not have gene symbols in it nor does it contain `NA` values. This will change the way you treat the data before running your functions_
 
 ## Writing figures to file
 
