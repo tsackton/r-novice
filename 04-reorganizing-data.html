@@ -92,7 +92,7 @@ A ==<span class="st"> </span>B
 <span class="kw">all</span>(A ==<span class="st"> </span>B)</code></pre>
 <div id="challenge" class="challenge">
 <h3>Challenge</h3>
-<p>Apply the <code>all</code> function to check whether all of the row names of our metadata are contained in the header of our &gt; data file. Also check to see that they are in the same order.</p>
+<p>Apply the <code>all</code> function to check whether all of the row names of our metadata are contained in the header of our data file. Also check to see that they are in the same order.</p>
 </div>
 <h2 id="subset-data-using-matching">Subset data using matching</h2>
 <p>The column names in our data matrix are all contained in the row names of our metadata, but they appear to be out of order. We can use the <code>match()</code> function to create a new data matrix such that samples are in the same order. The function <code>match()</code> takes at least 2 arguments: the values to be matched (in our case the row names <code>metadata</code>), and the table that contains the values to be matched against (in our case the column names of <code>data</code>. The function returns the position of the matches in the table, and this can be used to data columns. For values that don't match you can specify what values you would have it assigned using <code>nomatch</code> argument (by default this is NA).</p>

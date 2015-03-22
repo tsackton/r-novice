@@ -51,6 +51,9 @@ rpkm_noNA <- annotated_rpkm[complete.cases(annotated_rpkm), ]
 > ### Challenge {.challenge}
 > Compute the [standard error](http://en.wikipedia.org/wiki/Standard_error) for "sample1". (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)
 
+
+
+
 ## The `apply` Function
 To obtain mean values for all samples we can use `mean` on each column individually, but there is also an easier way to go about it. The `apply` family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.
 
@@ -106,7 +109,7 @@ We can change the shape of the data point using `pch`.
 plot(samplemeans, pch=8)
 ```
 
-<img src="figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
 
 We can add a title to the plot by assining a string to `main`
 
@@ -115,7 +118,7 @@ We can add a title to the plot by assining a string to `main`
 plot(samplemeans, pch=8, main="Scatter plot of mean values")
 ```
 
-<img src="figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
 
 ## Barplot
 In the case of our data, a **barplot**  would be much more useful. We can use `barplot` to draw a single bar representing each sample and the height indicates the average expression level. 
@@ -125,7 +128,7 @@ In the case of our data, a **barplot**  would be much more useful. We can use `b
 barplot(samplemeans)
 ```
 
-<img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
 
 The sample names appear to be too large for the plot, we can change that by changing the `cex.names` value. 
 
@@ -134,7 +137,7 @@ The sample names appear to be too large for the plot, we can change that by chan
 barplot(samplemeans, cex.names=0.5)
 ```
 
-<img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
 
 The names are too small to read. Alternatively we can also just change the names to be numeric values and keep the same size.
 
@@ -143,7 +146,7 @@ The names are too small to read. Alternatively we can also just change the names
 barplot(samplemeans, names.arg=c(1:12)) # supply numbers as labels
 ```
 
-<img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
 
 We can also flip the axes so that the plot is projected horizontally.
 
@@ -152,7 +155,7 @@ We can also flip the axes so that the plot is projected horizontally.
 barplot(samplemeans, names.arg=c(1:12), horiz=TRUE) 
 ```
 
-<img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
 
 ## Histogram
 If we are interested in an overall distribution of values, **histogram** is a plot very commonly used. It plots the frequencies that data appears within certain ranges. To plot a histogram of the data use the `hist` command:
@@ -162,7 +165,7 @@ If we are interested in an overall distribution of values, **histogram** is a pl
 hist(samplemeans)
 ```
 
-<img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" />
 
 The range of values for sample means is 22 to 39. As you can see R will automatically calculate the intervals to use. There are many options to determine how to break up the intervals. Let's increase the number of breaks to see how that changes the plot:
 
@@ -180,7 +183,7 @@ Similar to the other plots we can tweak the aesthetics. Let's color in the bar a
 hist(samplemeans, xlab="Mean expression level", main="", col="darkgrey", border=FALSE) 
 ```
 
-<img src="figure/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
 
 ##Boxplot
 
@@ -202,10 +205,12 @@ boxplot(samplemeans~celltype, df,  col=c("blue","red"),
         main="Average expression differences between celltypes", ylab="Expression")
 ```
 
-<img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" />
 
 > ### Challenge {.challenge}
 > The previous challenge asked you to compute the standard error for "sample1". Using the `apply` function to generate a vector of standard error values for each sample. Use a boxplot to illustrate the differences in standard error between WT and KO samples. 
+
+
 
 # Advanced figures (`ggplot2`)
 
@@ -229,7 +234,7 @@ ggplot(data=df, aes(x= genotype, y=samplemeans)) +
   geom_boxplot() 
 ```
 
-<img src="figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
 
 Now let's add in some more features to the boxplot. In the `aes()` we can specify the color of the boxes by adding in a `fill` value. If we add in We can also chain in additional functions to include titles for the axes and the plot area.
 
@@ -242,7 +247,7 @@ ggplot(data=df, aes(x= genotype, y=samplemeans, fill=genotype)) +
   ylab('Mean expression') 
 ```
 
-<img src="figure/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
 
 Unlike base R graphs, the ggplot graphs are not effected by many of the options set in the `par()` function (e.g. adjusting relative size of axis labels usin `cex`). They can be modified using the `theme()` function, and by adding graphic parameters. Here, we will increase the size of the axis labels and the main title. We can also change the `fill` variable to `celltype` - how does this change the plot? **What if you switch `genotype` with `celltype` in the aeshetics argument. How will that affect the figure?** 
 
@@ -258,7 +263,7 @@ ggplot(data=df, aes(x= genotype, y=samplemeans, fill=celltype)) +
         axis.text = element_text(size = rel(1.25)))
 ```
 
-<img src="figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" style="display: block; margin: auto;" />
 
 ## Barplot
 For the barplot, we need to define the graph type to `geom_bar`. Since we don't have an x variable, we need to specify the row names as our index so each sample is plotted on its own. For `fill` you can use `genotype` or `celltype` and see how the plot changes. **Can you determine how we got the axis labels on an angle?**
@@ -276,7 +281,7 @@ ggplot(data=df, aes(x=row.names(df), y=samplemeans, fill=genotype)) +
         axis.text.x = element_text(angle=45, vjust=0.5, hjust=0.6, size = rel(1.25)))
 ```
 
-<img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" style="display: block; margin: auto;" />
 
 
 # More advanced figures (optional)
@@ -330,7 +335,7 @@ ggplot(df, aes(PC1, PC2, label = row.names(df), color = genotype)) +
   scale_x_continuous(expand = c(0.3,  0.3))
 ```
 
-<img src="figure/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" />
+<img src="figure/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" style="display: block; margin: auto;" />
 
 We have only scratched the surface here. To learn more, see the [ggplot reference site](http://docs.ggplot2.org/), and Winston Chang's excellent [Cookbook for R](http://wiki.stdout.org/rcookbook/Graphs/) site. Though slightly out of date, [ggplot2: Elegant Graphics for Data Anaysis](http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403) is still the definative book on this subject.
 
@@ -371,7 +376,7 @@ heatmap.2(cor_mat, trace="none", Colv=NULL, dendrogram="row", key=FALSE)
 
 <img src="figure/heatmap-new-1.png" title="plot of chunk heatmap-new" alt="plot of chunk heatmap-new" style="display: block; margin: auto;" />
 
-As with any function in R, there are many way in which we can tweak arguments to customize the heatmap. We encourage you take time to read through the reference manual and explore other ways of generating heatmaps in R (_hint: ggplot also does heatmaps!_)
+As with any function in R, there are many way in which we can tweak arguments to customize the heatmap. We encourage you take time to read through the reference manual and explore other ways of generating heatmaps in R (_ggplot also does heatmaps!_)
 
 > ### Challenge {.challenge}
 > Throughout this session we have mainly been working with the RPKM data file. Start a new R session (clear your environment) and load in your counts file `data/combined.counts` and your metadata file. Using the count data matrix you will:
@@ -384,7 +389,7 @@ As with any function in R, there are many way in which we can tweak arguments to
 
 ## Writing figures to file
 
-There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on `Export` when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate x`the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png`.
+There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on `Export` when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png`.
 
 Initialize a plot that will be written directly to a file using `pdf`, `png` etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the `dev.off()` function. There are also `bmp`, `tiff`, and `jpeg` functions, though the jpeg function has proven less stable than the others.
 

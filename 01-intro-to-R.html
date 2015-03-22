@@ -104,10 +104,16 @@ weights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv"
 weights</code></pre>
 <pre><code>## [1] 30 50 60 65 82 90</code></pre>
 <p>What happens here is that we take the original vector <code>weights</code>, and we are adding another item first to the end of the other ones, and then another item at the beginning. We can do this over and over again to build a vector or a dataset. As we program, this may be useful to autoupdate results that we are collecting or calculating.</p>
-<p>We just saw 2 of the 6 <strong>data types</strong> that R uses: <code>&quot;character&quot;</code> and <code>&quot;numeric&quot;</code>. The other 4 are: * <code>&quot;logical&quot;</code> for <code>TRUE</code> and <code>FALSE</code> (the boolean data type; true and false values do not require quotations) * <code>&quot;integer&quot;</code> for integer numbers (e.g., <code>2L</code>, the <code>L</code> indicates to R that it's an integer) * <code>&quot;complex&quot;</code> to represent complex numbers with real and imaginary parts (e.g., <code>1+4i</code>) and that's all we're going to say about them * <code>&quot;raw&quot;</code> that we won't discuss further</p>
+<p>We just saw 2 of the 6 <strong>data types</strong> that R uses: <code>&quot;character&quot;</code> and <code>&quot;numeric&quot;</code>. The other 4 are:</p>
+<ul>
+<li><code>&quot;logical&quot;</code> for <code>TRUE</code> and <code>FALSE</code> (the boolean data type; true and false values do not require quotations)</li>
+<li><code>&quot;integer&quot;</code> for integer numbers (e.g., <code>2L</code>, the <code>L</code> indicates to R that it's an integer)</li>
+<li><code>&quot;complex&quot;</code> to represent complex numbers with real and imaginary parts (e.g., <code>1+4i</code>) and that's all we're going to say about them</li>
+<li><code>&quot;raw&quot;</code> that we won't discuss further</li>
+</ul>
 <div id="challenge-1" class="challenge">
 <h3>Challenge</h3>
-<p>Try creating a logical vector that is the same length as the <code>weights</code> vector. Use the help manual to see how integer variable differs from the numeric.</p>
+<p>Try creating a logical vector that is the same length as the <code>weights</code> vector. Assign a <code>TRUE</code> value for values that are multiples of 10, otherwise assign <code>FALSE</code>. Use the help manual to see how integer variable differs from the numeric.</p>
 </div>
 <p>Vectors are one of the many <strong>data structures</strong> that R uses. Other important ones are lists (<code>list</code>), matrices (<code>matrix</code>), data frames (<code>data.frame</code>) and factors (<code>factor</code>).</p>
 <h2 id="functions-and-their-arguments">Functions and their arguments</h2>
@@ -153,9 +159,11 @@ attached base packages:
 [<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base    </code></pre>
 <p>In this course we will mostly be using functions from the standard base packages. However, the more you work with R you will come to realize that there is a cornucopia of R packages that offer a wide variety of functionality. To use additional packages will require installation. Packages for R can be installed from the <a href="http://cran.r-project.org/">CRAN</a> package repository. An example is given below as we install the <code>gplots</code> package required for some images we will create later on.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;gplots&#39;</span>)</code></pre>
-<p>Alternatively, packages can also be installed from <a href="">Bioconductor</a> by using the <code>biocLite.R</code> script. Here we will install another package useful for visualization <code>ggplot2</code></p>
+<p>Alternatively, packages can also be installed from <a href="">Bioconductor</a> by using the <code>biocLite.R</code> installation script. You will first need to install Bioconductor and all the standard packages (this only needs to be done once ever):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre>
+<span class="kw">biocLite</span>()</code></pre>
+<p>Once you have the standard installed, you can add additional packages using the <code>biocLite.R</code> script. If it's a new R session you will also have to source the script again. Here we will install another package useful for visualization <code>ggplot2</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">biocLite</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre>
 <p>Once you have the package installed, you can load it into your R session for use. Note that quotations are not required here.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gplots)
 <span class="kw">library</span>(ggplot2)</code></pre>

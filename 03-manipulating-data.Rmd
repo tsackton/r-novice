@@ -52,7 +52,7 @@ rep(51:54, each = 2, times = 3)  # length 24, 3 complete replications
 ```
 
 > ### Challenge {.challenge}
-> Using the new functions you have learned we can now **create** a `data.frame` manually with the function `data.frame()`. This function takes in each column as an argument by giving it name, and the `c()` function concatenates the values into a vector. For this activity create three vectors corresponding to the three columns (`genotype`, `celltype`, `replicate`) in our `metadata` using the functions we just learned. 
+> Using the new functions you have learned we can now **re-create** your `metadata` file.  For this activity create three vectors corresponding to the three columns (`genotype`, `celltype`, `replicate`) in our `metadata`. BONUS: Use the function `data.frame()` to combine the vectors into a dataframe. _Hint: This function takes in each column as an argument by giving it name, and the `c()` function concatenates the values into a vector_. 
 
 ```{r, echo=FALSE}
 

@@ -207,7 +207,8 @@ the beginning. We can do this over and over again to build a vector or a
 dataset. As we program, this may be useful to autoupdate results that we are
 collecting or calculating.
 
-We just saw 2 of the 6 **data types** that R uses: `"character"` and `"numeric"`. The other 4 are:
+We just saw 2 of the 6 **data types** that R uses: `"character"` and `"numeric"`. The other 4 are:    
+
 * `"logical"` for `TRUE` and `FALSE` (the boolean data type; true and false values do not require quotations)
 * `"integer"` for integer numbers (e.g., `2L`, the `L` indicates to R that it's an integer)
 * `"complex"` to represent complex numbers with real and imaginary parts (e.g.,
@@ -215,7 +216,7 @@ We just saw 2 of the 6 **data types** that R uses: `"character"` and `"numeric"`
 * `"raw"` that we won't discuss further
 
 > ### Challenge {.challenge}
-> Try creating a logical vector that is the same length as the `weights` vector. Use the help manual to see how integer variable differs from the numeric.
+> Try creating a logical vector that is the same length as the `weights` vector. Assign a `TRUE` value for values that are multiples of 10, otherwise assign `FALSE`. Use the help manual to see how integer variable differs from the numeric.
 
 Vectors are one of the many **data structures** that R uses. Other important
 ones are lists (`list`), matrices (`matrix`), data frames (`data.frame`) and
@@ -325,13 +326,21 @@ Packages for R can be installed from the [CRAN](http://cran.r-project.org/) pack
 install.packages('gplots')
 ```
 
-Alternatively, packages can also be installed from [Bioconductor]() by using the `biocLite.R` script. Here we will install another package useful for visualization `ggplot2`
+Alternatively, packages can also be installed from [Bioconductor]() by using the `biocLite.R` installation script. You will first need to install Bioconductor and all the standard packages (this only needs to be done once ever):
 
 
 ```r
 source("http://bioconductor.org/biocLite.R")
+biocLite()
+```
+
+Once you have the standard installed, you can add additional packages using the `biocLite.R` script. If it's a new R session you will also have to source the script again. Here we will install another package useful for visualization `ggplot2`:
+
+
+```r
 biocLite('ggplot2')
 ```
+
 
 Once you have the package installed, you can load it into your R session for use. Note that quotations are not required here.
 

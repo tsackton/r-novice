@@ -108,7 +108,7 @@ all(A == B)
 ```
 
 > ### Challenge {.challenge}
-> Apply the `all` function to check whether all of the row names of our metadata are contained in the header of our > data file. Also check to see that they are in the same order.
+> Apply the `all` function to check whether all of the row names of our metadata are contained in the header of our data file. Also check to see that they are in the same order.
 
 
 ## Subset data using matching

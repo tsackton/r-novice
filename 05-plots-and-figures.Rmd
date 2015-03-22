@@ -51,6 +51,14 @@ rpkm_noNA <- annotated_rpkm[complete.cases(annotated_rpkm), ]
 > ### Challenge {.challenge}
 > Compute the [standard error](http://en.wikipedia.org/wiki/Standard_error) for "sample1". (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)
 
+```{r echo=FALSE, eval=FALSE}
+# sample SD divided by the square root of number of observations
+sd <- sd(annotated_rpkm[,'sample1'], na.rm=T)
+n <- nrow(annotated_rpkm)
+sem <- sd / sqrt(n)
+```
+
+
 ## The `apply` Function
 To obtain mean values for all samples we can use `mean` on each column individually, but there is also an easier way to go about it. The `apply` family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.
 
@@ -170,6 +178,17 @@ boxplot(samplemeans~celltype, df,  col=c("blue","red"),
 
 > ### Challenge {.challenge}
 > The previous challenge asked you to compute the standard error for "sample1". Using the `apply` function to generate a vector of standard error values for each sample. Use a boxplot to illustrate the differences in standard error between WT and KO samples. 
+
+```{r, echo=FALSE, eval=FALSE}
+
+# sample SD divided by the square root of number of observations
+getSEM <-function(x) {sd(x) / sqrt(length(x))}
+sem <- apply(annotated_rpkm[,2:ncol(annotated_rpkm)], 2, getSEM)
+
+# boxplot
+df <- cbind(metadata, sem=sem)
+boxplot(sem ~ genotype, df)
+```
 
 # Advanced figures (`ggplot2`)
 
@@ -308,7 +327,7 @@ It is often useful to combine heatmaps with hierarchical clustering, which is a 
 heatmap.2(cor_mat, trace="none", Colv=NULL, dendrogram="row", key=FALSE)
 ```
 
-As with any function in R, there are many way in which we can tweak arguments to customize the heatmap. We encourage you take time to read through the reference manual and explore other ways of generating heatmaps in R (_hint: ggplot also does heatmaps!_)
+As with any function in R, there are many way in which we can tweak arguments to customize the heatmap. We encourage you take time to read through the reference manual and explore other ways of generating heatmaps in R (_ggplot also does heatmaps!_)
 
 > ### Challenge {.challenge}
 > Throughout this session we have mainly been working with the RPKM data file. Start a new R session (clear your environment) and load in your counts file `data/combined.counts` and your metadata file. Using the count data matrix you will:
@@ -321,7 +340,7 @@ As with any function in R, there are many way in which we can tweak arguments to
 
 ## Writing figures to file
 
-There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on `Export` when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate x`the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png`.
+There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on `Export` when the image is plotted. This will give you the option of `png` or `pdf` and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include `pdf()`, `png`.
 
 Initialize a plot that will be written directly to a file using `pdf`, `png` etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the `dev.off()` function. There are also `bmp`, `tiff`, and `jpeg` functions, though the jpeg function has proven less stable than the others.
 

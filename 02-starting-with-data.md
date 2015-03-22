@@ -141,7 +141,7 @@ objects besides `data.frame`.
 > ### Challenge {.challenge}
 > * What is the class of the object `metadata`?
 > * How many rows and how many columns are in this object?
-> * Load in data again, storing it as `test_data` and using `stringsAsFactors=F`
+> * Load in data again, storing it as `test_data` and using `stringsAsFactors=F`. How does this change the data?
 
 As you can see, the columns `genotype` and `celltype` are of a special class called
 `factor`. Before we learn more about the `data.frame` class, we are going to
