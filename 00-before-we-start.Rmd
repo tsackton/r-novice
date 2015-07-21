@@ -16,13 +16,7 @@ minutes: 15
 
 # Before we get started
 
-* Head to GitHub (making sure you are logged in): https://github.com/mistrm82/2015-03-23-hbc-swc
-* From here you want to `Fork` the repo by clicking in the top right corner. This will create a copy in your own account. Now in your forked version you want to copy the `HTTPS clone url'  
 * Start RStudio 
-* Under the `File` menu, click on `New project`, choose `Version Control`, then
-  `Git`
-* Here you will be prompted to enter a `Repository URL`. The forked repo (copied link) can now we be pasted
-* Once the url is copy/pasted, the `Project directory name` will automatically populate with the name of the repo `2015-03-23-hbc-swc`. You will need to specify where you would like to place this directory. This will become your **working directory** for the rest of class. (e.g., `~/R/2015-03-23-hbc-swc`). 
 * Check your working directory using `getwd()`
 * Create a new R script (File --> New File --> R script) and save it in your working
   directory (e.g. `softwarecarpentry-script.R`)
