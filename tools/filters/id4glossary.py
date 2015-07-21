@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/local/bin/python3
 """Pandoc filter to convert add ids to glossary entries.
 
 Usage:

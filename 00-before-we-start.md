@@ -16,13 +16,8 @@ minutes: 15
 
 # Before we get started
 
-* Head to GitHub (making sure you are logged in): https://github.com/mistrm82/2015-03-23-hbc-swc
-* From here you want to `Fork` the repo by clicking in the top right corner. This will create a copy in your own account. Now in your forked version you want to copy the `HTTPS clone url'  
 * Start RStudio 
-* Under the `File` menu, click on `New project`, choose `Version Control`, then
-  `Git`
-* Here you will be prompted to enter a `Repository URL`. The forked repo (copied link) can now we be pasted
-* Once the url is copy/pasted, the `Project directory name` will automatically populate with the name of the repo `2015-03-23-hbc-swc`. You will need to specify where you would like to place this directory. This will become your **working directory** for the rest of class. (e.g., `~/R/2015-03-23-hbc-swc`). 
+* Create a new directory to be your 'working directory' via Session --> Set Working Directory --> Choose Directory
 * Check your working directory using `getwd()`
 * Create a new R script (File --> New File --> R script) and save it in your working
   directory (e.g. `softwarecarpentry-script.R`)
@@ -183,23 +178,18 @@ sessionInfo()
 ```
 
 ```
-## R version 3.1.2 (2014-10-31)
-## Platform: x86_64-pc-linux-gnu (64-bit)
+## R version 3.1.3 (2015-03-09)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## Running under: OS X 10.10.4 (Yosemite)
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  base     
 ## 
 ## loaded via a namespace (and not attached):
-## [1] evaluate_0.5.5 formatR_1.0    knitr_1.9      stringr_0.6.2 
-## [5] tools_3.1.2
+## [1] evaluate_0.6  formatR_1.1   knitr_1.9     stringr_0.6.2 tools_3.1.3
 ```
 
 ## Where to ask for help?

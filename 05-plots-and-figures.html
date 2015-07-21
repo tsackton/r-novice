@@ -37,82 +37,82 @@
 </div>
 <h1 id="calculating-statistics">Calculating statistics</h1>
 <p>Let's get a closer look at our data. Each column represents a sample in our experiment, and each sample has ~38K values corresponding to the expression of different transcripts. Suppose we wanted to compute the average value for a sample, or the minimum and maximum values? The R base package provides many built-in functions such as <code>mean</code>, <code>median</code>, <code>min</code>, <code>max</code>, and <code>range</code>. Try computing the mean for &quot;sample1&quot; (<em>Hint: apply what you have learned previously on indexing</em>)</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(annotated_rpkm[,<span class="st">&#39;sample1&#39;</span>])</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(annotated_rpkm[,<span class="st">&#39;sample1&#39;</span>])</code></pre></div>
 <p>Hmm, we just get <code>NA</code>. That's because we don't have the values for every transcript in this sample and missing data is recorded as <code>NA</code>. By default, all <strong>R functions operating on vectors that contains missing data will return NA</strong>. It's a way to make sure that users know they have missing data, and make a conscious decision on how to deal with it.</p>
 <p>When dealing with simple statistics like the mean, the easiest way to ignore <code>NA</code> (the missing data) is to use <code>na.rm=TRUE</code> (<code>rm</code> stands for remove). Try computing the <code>mean</code> again, also test out some of the other functions.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mean </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mean </span>
 <span class="kw">mean</span>(annotated_rpkm[,<span class="st">&#39;sample1&#39;</span>], <span class="dt">na.rm=</span>T)
 
 <span class="co"># Maximum</span>
 <span class="kw">max</span>(annotated_rpkm[,<span class="st">&#39;sample1&#39;</span>], <span class="dt">na.rm=</span>T)
 
 <span class="co"># Minimum</span>
-<span class="kw">min</span>(annotated_rpkm[,<span class="st">&#39;sample1&#39;</span>], <span class="dt">na.rm=</span>T)</code></pre>
+<span class="kw">min</span>(annotated_rpkm[,<span class="st">&#39;sample1&#39;</span>], <span class="dt">na.rm=</span>T)</code></pre></div>
 <p>In some cases, it might be useful to remove the missing data from the vector. For this purpose, R comes with the function <code>na.omit</code> to generate a vector that has NA's removed. For some applications, it's useful to keep all observations, for others, it might be best to remove all observations that contain missing data. The function <code>complete.cases()</code> returns a logical vector indicating which rows have no missing values. We can use the logical vector to remove rows that contain at least one missing observation. If we do this on our data, how many rows are we left with?</p>
-<pre class="sourceCode r"><code class="sourceCode r">rpkm_noNA &lt;-<span class="st"> </span>annotated_rpkm[<span class="kw">complete.cases</span>(annotated_rpkm), ]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rpkm_noNA &lt;-<span class="st"> </span>annotated_rpkm[<span class="kw">complete.cases</span>(annotated_rpkm), ]</code></pre></div>
 <div id="challenge" class="challenge">
 <h3>Challenge</h3>
 <p>Compute the <a href="http://en.wikipedia.org/wiki/Standard_error">standard error</a> for &quot;sample1&quot;. (hints: there is no built-in function to compute standard errors, but there may be functions for the different components of the formula)</p>
 </div>
 <h2 id="the-apply-function">The <code>apply</code> Function</h2>
 <p>To obtain mean values for all samples we can use <code>mean</code> on each column individually, but there is also an easier way to go about it. The <code>apply</code> family of functions keep you from having to write loops (R is bad at looping) to perform some sort of operation on every row or column of a data matrix or a data frame. The family includes several functions, each differing slightly on the inputs or outputs.</p>
-<pre class="sourceCode r"><code class="sourceCode r">base::apply             Apply Functions Over Array Margins
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">base::apply             Apply Functions Over Array Margins
 base::by                Apply a Function to a Data Frame Split by Factors
 base::eapply            Apply a Function Over Values in an Environment
 base::lapply            Apply a Function over a List or Vector
 base::mapply            Apply a Function to Multiple List or Vector Arguments
 base::rapply            Recursively Apply a Function to a List
-base::tapply            Apply a Function Over a Ragged Array</code></pre>
+base::tapply            Apply a Function Over a Ragged Array</code></pre></div>
 <p>We will be using <code>apply</code> in our examples today, but do take a moment on your own to explore the many options that are available. The <code>apply</code> function returns a vector or array or list of values obtained by applying a function to margins of an array or matrix. We know about vectors/arrays and functions, but what are these “margins”? Margins are referring to either the rows (denoted by 1), the columns (denoted by 2) or both (1:2). By “both”, we mean apply the function to each individual value. Let's try this with the mean function on our data with NAs removed <code>rpkm_noNA</code>, but remember to index and remove the first column of gene symbols before input (because gene symbols are characters and not numeric, the <code>mean</code> function will return an error).</p>
-<pre class="sourceCode r"><code class="sourceCode r">samplemeans &lt;-<span class="st"> </span><span class="kw">apply</span>(rpkm_noNA[,<span class="dv">2</span>:<span class="dv">13</span>], <span class="dv">2</span>, mean) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">samplemeans &lt;-<span class="st"> </span><span class="kw">apply</span>(rpkm_noNA[,<span class="dv">2</span>:<span class="dv">13</span>], <span class="dv">2</span>, mean) </code></pre></div>
 <p><em>How long is the vector of values returned?</em></p>
 <h1 id="basic-plots-in-r">Basic plots in R</h1>
 <p>The mathematician Richard Hamming once said, &quot;The purpose of computing is insight, not numbers&quot;, and the best way to develop insight is often to visualize data. Visualization deserves an entire lecture (or course) of its own, but we can explore a few features of R's base plotting package.</p>
 <p>When we are working with large sets of numbers it can be useful to display that information graphically. R has a number of built-in tools for basic graph types such as hisotgrams, scatter plots, bar charts, boxplots and much <a href="http://www.statmethods.net/graphs/">more</a>. We'll test a few of these out here on our <code>samplemeans</code> vector, but first we will create a combined data frame that maps our metadata to the sample mean values.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a combined data frame</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a combined data frame</span>
 <span class="kw">all</span>(<span class="kw">rownames</span>(metadata) ==<span class="st"> </span><span class="kw">names</span>(samplemeans)) <span class="co"># sanity check for sample order</span>
-df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplemeans) </code></pre>
+df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplemeans) </code></pre></div>
 <h2 id="scatterplot">Scatterplot</h2>
 <p>Let's start with a <strong>scatterplot</strong>. A scatter plot provides a graphical view of the relationship between two sets of numbers. We don't have a variable in our metadata that is a continous variable, so there is nothing to plot it against but we can plot the values against their index values just to demonstrate the function.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans)</code></pre></div>
 <p><img src="figure/scatter-plot1-1.png" title="plot of chunk scatter-plot1" alt="plot of chunk scatter-plot1" style="display: block; margin: auto;" /></p>
 <p>Each point represents a sample and the value on the x-axis is the sample number, where the values on the y-axis correspond to the average expression for that sample. For any plot you can customize many features of your graphs (fonts, colors, axes, titles) through <a href="http://www.statmethods.net/advgraphs/parameters.html">graphic options</a> We can change the shape of the data point using <code>pch</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>)</code></pre></div>
 <p><img src="figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" /></p>
 <p>We can add a title to the plot by assining a string to <code>main</code></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>, <span class="dt">main=</span><span class="st">&quot;Scatter plot of mean values&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>, <span class="dt">main=</span><span class="st">&quot;Scatter plot of mean values&quot;</span>)</code></pre></div>
 <p><img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" /></p>
 <h2 id="barplot">Barplot</h2>
 <p>In the case of our data, a <strong>barplot</strong> would be much more useful. We can use <code>barplot</code> to draw a single bar representing each sample and the height indicates the average expression level.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans)</code></pre></div>
 <p><img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" /></p>
 <p>The sample names appear to be too large for the plot, we can change that by changing the <code>cex.names</code> value.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">cex.names=</span><span class="fl">0.5</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">cex.names=</span><span class="fl">0.5</span>)</code></pre></div>
 <p><img src="figure/unnamed-chunk-11-1.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" style="display: block; margin: auto;" /></p>
 <p>The names are too small to read. Alternatively we can also just change the names to be numeric values and keep the same size.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">names.arg=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">12</span>)) <span class="co"># supply numbers as labels</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">names.arg=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">12</span>)) <span class="co"># supply numbers as labels</span></code></pre></div>
 <p><img src="figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" /></p>
 <p>We can also flip the axes so that the plot is projected horizontally.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">names.arg=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">12</span>), <span class="dt">horiz=</span><span class="ot">TRUE</span>) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans, <span class="dt">names.arg=</span><span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">12</span>), <span class="dt">horiz=</span><span class="ot">TRUE</span>) </code></pre></div>
 <p><img src="figure/unnamed-chunk-13-1.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" style="display: block; margin: auto;" /></p>
 <h2 id="histogram">Histogram</h2>
 <p>If we are interested in an overall distribution of values, <strong>histogram</strong> is a plot very commonly used. It plots the frequencies that data appears within certain ranges. To plot a histogram of the data use the <code>hist</code> command:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans)</code></pre></div>
 <p><img src="figure/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" /></p>
 <p>The range of values for sample means is 22 to 39. As you can see R will automatically calculate the intervals to use. There are many options to determine how to break up the intervals. Let's increase the number of breaks to see how that changes the plot:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans, <span class="dt">xlab=</span><span class="st">&quot;Mean expression level&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">breaks=</span><span class="dv">20</span>) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans, <span class="dt">xlab=</span><span class="st">&quot;Mean expression level&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">breaks=</span><span class="dv">20</span>) </code></pre></div>
 <p><img src="figure/hist-1.png" title="plot of chunk hist" alt="plot of chunk hist" style="display: block; margin: auto;" /></p>
 <p>Similar to the other plots we can tweak the aesthetics. Let's color in the bar and remove the borders:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans, <span class="dt">xlab=</span><span class="st">&quot;Mean expression level&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">col=</span><span class="st">&quot;darkgrey&quot;</span>, <span class="dt">border=</span><span class="ot">FALSE</span>) </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(samplemeans, <span class="dt">xlab=</span><span class="st">&quot;Mean expression level&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">col=</span><span class="st">&quot;darkgrey&quot;</span>, <span class="dt">border=</span><span class="ot">FALSE</span>) </code></pre></div>
 <p><img src="figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" /></p>
 <h2 id="boxplot">Boxplot</h2>
 <p>Using addiitonal sample information from our metadata, we can use plots to compare values between the two different celltypes 'typeA' and 'typeB' using a <strong>boxplot</strong>. A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Boxplot</span>
-<span class="kw">boxplot</span>(samplemeans~celltype, df)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Boxplot</span>
+<span class="kw">boxplot</span>(samplemeans~celltype, df)</code></pre></div>
 <p><img src="figure/boxplot-1.png" title="plot of chunk boxplot" alt="plot of chunk boxplot" style="display: block; margin: auto;" /></p>
 <p>Similar to the plots above, we can pass in arguments to add in extras like plot title, axis labels and colors.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(samplemeans~celltype, df,  <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;red&quot;</span>),
-        <span class="dt">main=</span><span class="st">&quot;Average expression differences between celltypes&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Expression&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">boxplot</span>(samplemeans~celltype, df,  <span class="dt">col=</span><span class="kw">c</span>(<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;red&quot;</span>),
+        <span class="dt">main=</span><span class="st">&quot;Average expression differences between celltypes&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Expression&quot;</span>)</code></pre></div>
 <p><img src="figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" /></p>
 <div id="challenge-1" class="challenge">
 <h3>Challenge</h3>
@@ -121,32 +121,32 @@ df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplem
 <h1 id="advanced-figures-ggplot2">Advanced figures (<code>ggplot2</code>)</h1>
 <p>There's also a plotting package called <a href="http://docs.ggplot2.org/"><code>ggplot2</code></a> that adds a lot of functionality to the basic plots seen above. The syntax takes some getting used to but it's extremely powerful and flexible. We can start by re-creating some of the above plots but using ggplot functions to get a feel for the syntax.</p>
 <p><code>ggplot</code> is best used on data in the <code>data.frame</code> form, so we will will work with our combined <code>df</code> for the following figures. Let's start by loading the <code>ggplot2</code> library.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)</code></pre></div>
 <h2 id="boxplot-1">Boxplot</h2>
 <p>The <code>ggplot()</code> command creates a plot object. In it we assign our data frame to the <code>data</code> argument, and <code>aes()</code> creates what Hadley Wickham calls an aesthetic: a mapping of variables to various parts of the plot. Note that ggplot functions can be chained with <code>+</code> signs to adding layers to the final plot. The next in chain is <code>geom_boxplot()</code>. The <code>geom</code> function specifies the geometric objects that define the graph type. The geom option is expressed as a character vector with one or more entries. Values include <code>geom_point</code>, <code>geom_boxplot</code>, <code>geom_line</code> etc</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_boxplot</span>() </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>() </code></pre></div>
 <p><img src="figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" /></p>
 <p>Now let's add in some more features to the boxplot. In the <code>aes()</code> we can specify the color of the boxes by adding in a <code>fill</code> value. If we add in We can also chain in additional functions to include titles for the axes and the plot area.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_boxplot</span>() +<span class="st"> </span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Genotype differences in average gene expression&#39;</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;Genotype&#39;</span>) +
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&#39;Mean expression&#39;</span>) </code></pre>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&#39;Mean expression&#39;</span>) </code></pre></div>
 <p><img src="figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" /></p>
 <p>Unlike base R graphs, the ggplot graphs are not effected by many of the options set in the <code>par()</code> function (e.g. adjusting relative size of axis labels usin <code>cex</code>). They can be modified using the <code>theme()</code> function, and by adding graphic parameters. Here, we will increase the size of the axis labels and the main title. We can also change the <code>fill</code> variable to <code>celltype</code> - how does this change the plot? <strong>What if you switch <code>genotype</code> with <code>celltype</code> in the aeshetics argument. How will that affect the figure?</strong></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>celltype)) +<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span> genotype, <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>celltype)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_boxplot</span>() +<span class="st"> </span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Genotype differences in average gene expression&#39;</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;Genotype&#39;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&#39;Mean expression&#39;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">2.0</span>)),
         <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.5</span>)),
-        <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))</code></pre>
+        <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))</code></pre></div>
 <p><img src="figure/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" style="display: block; margin: auto;" /></p>
 <h2 id="barplot-1">Barplot</h2>
 <p>For the barplot, we need to define the graph type to <code>geom_bar</code>. Since we don't have an x variable, we need to specify the row names as our index so each sample is plotted on its own. For <code>fill</code> you can use <code>genotype</code> or <code>celltype</code> and see how the plot changes. <strong>Can you determine how we got the axis labels on an angle?</strong></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">row.names</span>(df), <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">row.names</span>(df), <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">colour=</span><span class="st">&quot;black&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Average expression for each sample&#39;</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;&#39;</span>) +
@@ -154,43 +154,43 @@ df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplem
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">2.0</span>)),
         <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.5</span>)),
         <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)),
-        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">45</span>, <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.6</span>, <span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))</code></pre>
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">45</span>, <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.6</span>, <span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))</code></pre></div>
 <p><img src="figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" style="display: block; margin: auto;" /></p>
 <h1 id="more-advanced-figures-optional">More advanced figures (optional)</h1>
 <p>A figure that is often used in exploratory analsyis of data is PCA plot. PCA (principal components analysis) is a multivariate technique that allows us to summarize the systematic patterns of variations in the data. PCA takes the expresson levels for all probes and transforms it in principal component space, reducing each sample into one point (as coordinates within that space). This allows us to separate samples according to expression variation, and identify potential outliers.</p>
 <h2 id="pca">PCA</h2>
 <p>To plot a PCA plot we will be using <code>ggplot</code>, but first we will need to take the data matrix and generate the principal component vectors using <code>prcomp</code>. The input required is a transposed version of what we currently have loaded. That is, we need to have samples as our rows and genes as our columns. R has a built-in function to transpose which is denoted by <code>t()</code>. In the interest of time, ee will use the data matrix we generated previously thas <code>NA</code>s removed (although <code>prcomp</code> has an argument to help deal with this).</p>
-<pre class="sourceCode r"><code class="sourceCode r">pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(rpkm_noNA))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(rpkm_noNA))</code></pre></div>
 <p><em>What happened after running that command? Can you explain the error?</em> Using your knowledge of indexing, subset the data frame to obtain only numeric values for input.</p>
-<pre class="sourceCode r"><code class="sourceCode r">input &lt;-<span class="st"> </span>rpkm_noNA[,-<span class="dv">1</span>]
-pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(input))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">input &lt;-<span class="st"> </span>rpkm_noNA[,-<span class="dv">1</span>]
+pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span class="kw">t</span>(input))</code></pre></div>
 <p>Use the <code>str</code> function to take a quick peek at what is returned to us from the <code>prcomp</code> function. You can cross-reference with the help pages to see that is corresponds with what you are expected to be returned (<code>?prcomp</code>). There should be a list of five objects; the one we are interested in is <code>x</code> which is a matrix of the principal component vectors. Let's save that data matrix by assigning it to a new variable.</p>
-<pre class="sourceCode r"><code class="sourceCode r">pc_mat &lt;-<span class="st"> </span>pca_results$x</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pc_mat &lt;-<span class="st"> </span>pca_results$x</code></pre></div>
 <p>We are going to take a look at the first two principal componenets by plotting them against each other. Since we will want to include information from our metadata file, we can concatenate the PCA results to our metadata into a data frame for input to <code>ggplot</code>. The graphic type that we are using is a <strong>scatter plot denoted by <code>geom_point()</code></strong>, and we have specified to color by genotype.</p>
-<pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, pc_mat[,<span class="kw">c</span>(<span class="st">&#39;PC1&#39;</span>, <span class="st">&#39;PC2&#39;</span>)])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, pc_mat[,<span class="kw">c</span>(<span class="st">&#39;PC1&#39;</span>, <span class="st">&#39;PC2&#39;</span>)])
 
 <span class="kw">ggplot</span>(df, <span class="kw">aes</span>(PC1, PC2, <span class="dt">color =</span> genotype)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>)</code></pre>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>)</code></pre></div>
 <p><img src="figure/advanced-figures-1.png" title="plot of chunk advanced-figures" alt="plot of chunk advanced-figures" style="display: block; margin: auto;" /></p>
 <p>We see that there is one obvious outlier in the bottom right hand corner of the plot, which based on the legend correponds to a WT sample. It would be useful to know which sample that is. Adding to the chain of functions we can also include <code>geom_text</code> which draws a text label at any give <code>(x,y)</code> coordinate. There are additional parameters we need to play with to get the figure to look good (which mostly comes from trial and error). Now we know that it is &quot;sample7&quot; that is the outlier&quot;.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(PC1, PC2, <span class="dt">label =</span> <span class="kw">row.names</span>(df), <span class="dt">color =</span> genotype)) +<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(PC1, PC2, <span class="dt">label =</span> <span class="kw">row.names</span>(df), <span class="dt">color =</span> genotype)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>() +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(PC1, PC2, <span class="dt">label =</span> <span class="kw">row.names</span>(df)), <span class="dt">size =</span> <span class="dv">6</span>, <span class="dt">hjust=</span><span class="fl">0.1</span>, <span class="dt">vjust=</span><span class="fl">0.1</span>) +
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="fl">0.3</span>,  <span class="fl">0.3</span>))</code></pre>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand =</span> <span class="kw">c</span>(<span class="fl">0.3</span>,  <span class="fl">0.3</span>))</code></pre></div>
 <p><img src="figure/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" style="display: block; margin: auto;" /></p>
 <p>We have only scratched the surface here. To learn more, see the <a href="http://docs.ggplot2.org/">ggplot reference site</a>, and Winston Chang's excellent <a href="http://wiki.stdout.org/rcookbook/Graphs/">Cookbook for R</a> site. Though slightly out of date, <a href="http://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403">ggplot2: Elegant Graphics for Data Anaysis</a> is still the definative book on this subject.</p>
 <h2 id="heatmaps">Heatmaps</h2>
 <p>Another useful plot used to identify patterns in your data and potential outliers is to use heatmaps. A <strong>heatmap</strong> is a graphical representation of data where the individual values contained in a matrix are represented as colors. Heat maps are well-suited for visualizing large amounts of multi-dimensional data and can be used to identify clusters of rows or columns with similar values, as these are displayed as areas of similar color.</p>
 <p>Our data matrix is quite large, and a heatmap would be rather informative not having selected a subset of genes. Instead, we will generate a sample-to-sample correlation matrix by taking the correlation of RPKM values for all pairwise combinations of samples. To compute the correlations R has a built-in function for that, <code>cor</code> which can take in either two vectors or an entire matrix. We will give it the same input we used for PCA above.</p>
-<pre class="sourceCode r"><code class="sourceCode r">cor_mat &lt;-<span class="st"> </span><span class="kw">cor</span>(input)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cor_mat &lt;-<span class="st"> </span><span class="kw">cor</span>(input)</code></pre></div>
 <p><em>Check the dimensions of the matrix that is returned, and the range of values.</em> Take a quick peek inside <code>cor_mat</code> to see what was returned. This will be the input to our heatmap function. To generate a heatmap we will use <code>heatmap.2</code> which is part of the <code>gplots</code> package (that we installed earlier). Let's load the library:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gplots)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gplots)</code></pre></div>
 <p>To plot the heatmap, we simply call the function and pass in our correlation matrix:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap.2</span>(cor_mat)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap.2</span>(cor_mat)</code></pre></div>
 <p><img src="figure/heatmap-default-1.png" title="plot of chunk heatmap-default" alt="plot of chunk heatmap-default" style="display: block; margin: auto;" /></p>
 <p>This will generate a plot using the default settings. The default color gradient sets the lowest value in the heat map to white, and the highest value to a bright red, with a corresponding transition (or gradient) between these extremes. This color scheme can be changed by adding <code>col=</code> and specifying either a different built-in <a href="https://stat.ethz.ch/R-manual/R-devel/library/grDevices/html/palettes.html">color palette</a> by name, or <a href="http://www.r-bloggers.com/r-using-rcolorbrewer-to-colour-your-figures-in-r/">creating your own</a> palette.</p>
 <p>It is often useful to combine heatmaps with hierarchical clustering, which is a way of arranging items in a hierarchy based on the distance or similarity between them. The result of a hierarchical clustering calculation is displayed in a heat map as a dendrogram, which is a tree-structure of the hierarchy. In our heatmap both rows and columns have been clustered, but we can change that to remove column clustering (<code>Colv=NULL</code>, and <code>dendrogram=&quot;row&quot;</code>) since we have a symmetric matrix. We can also remove the trace by setting <code>trace=&quot;none</code> and get rid of the legend <code>key=FALSE</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap.2</span>(cor_mat, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">Colv=</span><span class="ot">NULL</span>, <span class="dt">dendrogram=</span><span class="st">&quot;row&quot;</span>, <span class="dt">key=</span><span class="ot">FALSE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap.2</span>(cor_mat, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">Colv=</span><span class="ot">NULL</span>, <span class="dt">dendrogram=</span><span class="st">&quot;row&quot;</span>, <span class="dt">key=</span><span class="ot">FALSE</span>)</code></pre></div>
 <p><img src="figure/heatmap-new-1.png" title="plot of chunk heatmap-new" alt="plot of chunk heatmap-new" style="display: block; margin: auto;" /></p>
 <p>As with any function in R, there are many way in which we can tweak arguments to customize the heatmap. We encourage you take time to read through the reference manual and explore other ways of generating heatmaps in R (<em>ggplot also does heatmaps!</em>)</p>
 <div id="challenge-2" class="challenge">
@@ -205,7 +205,7 @@ pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span c
 <h2 id="writing-figures-to-file">Writing figures to file</h2>
 <p>There are two ways in which figures and plots can be output to a file (rather than simply displaying on screen). The first (and easiest) is to export directly from the RStudio 'Plots' panel, by clicking on <code>Export</code> when the image is plotted. This will give you the option of <code>png</code> or <code>pdf</code> and selecting the directory to which you wish to save it to. The second option is to use R functions in the console, allowing you the flexibility to specify parameters to dictate the size and resolution of the output image. Some of the more popular formats include <code>pdf()</code>, <code>png</code>.</p>
 <p>Initialize a plot that will be written directly to a file using <code>pdf</code>, <code>png</code> etc. Within the function you will need to specify a name for your image, and the with and height (optional). Then create a plot using the usual functions in R. Finally, close the file using the <code>dev.off()</code> function. There are also <code>bmp</code>, <code>tiff</code>, and <code>jpeg</code> functions, though the jpeg function has proven less stable than the others.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pdf</span>(<span class="st">&quot;figure/barplot.pdf&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">pdf</span>(<span class="st">&quot;figure/barplot.pdf&quot;</span>)
 <span class="kw">ggplot</span>(<span class="dt">data=</span>df, <span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">row.names</span>(df), <span class="dt">y=</span>samplemeans, <span class="dt">fill=</span>genotype)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">colour=</span><span class="st">&quot;black&quot;</span>, <span class="dt">stat=</span><span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&#39;Average expression for each sample&#39;</span>) +
@@ -215,7 +215,7 @@ pca_results &lt;-<span class="st"> </span><span class="kw">prcomp</span>(<span c
         <span class="dt">axis.title =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.5</span>)),
         <span class="dt">axis.text =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)),
         <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">45</span>, <span class="dt">vjust=</span><span class="fl">0.5</span>, <span class="dt">hjust=</span><span class="fl">0.6</span>, <span class="dt">size =</span> <span class="kw">rel</span>(<span class="fl">1.25</span>)))
-<span class="kw">dev.off</span>()</code></pre>
+<span class="kw">dev.off</span>()</code></pre></div>
         </div>
       </div>
       <div class="footer">

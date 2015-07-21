@@ -46,9 +46,9 @@
 <h1 id="loading-in-files">Loading in files</h1>
 <p>We are studying two different celltypes in mice and want to evaluate how gene expression differs in WT versus Knockout (KO). The experimental design setup is stored as a <code>.csv</code> file: each row holds information for a single animal, and the columns represent <code>genotype</code>(WT or KO), <code>celltype</code> (typeA or typeB), and <code>replicate number</code>.</p>
 <p>To load in our metadata, we need to locate the <code>mouse_exp_design.csv</code> file. We will use <code>read.csv()</code> to load into memory (as a <code>data.frame</code>) the content of the CSV file. Using the same command function as our previous session, but <strong>this time we will assign it to a variable</strong>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&#39;meta/mouse_exp_design.csv&#39;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&#39;meta/mouse_exp_design.csv&#39;</span>)</code></pre></div>
 <p>This statement doesn't produce any output because assignment doesn't display anything. If we want to check that our data has been loaded, we can print the variable's value:</p>
-<pre class="sourceCode r"><code class="sourceCode r">metadata</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata</code></pre></div>
 <pre><code>##          genotype celltype replicate
 ## sample1        Wt    typeA         1
 ## sample2        Wt    typeA         2
@@ -64,17 +64,17 @@
 ## sample12       KO    typeB         3</code></pre>
 <p><strong>At this point, make sure all participants have the data loaded</strong></p>
 <p>By default, using the <code>read.csv</code> function will load in the data and assign the first row of the table to be our <strong>column names</strong>. Additionally since our header has one less name than there are columns R automatically assigns the <strong>first column as row names</strong>. We can look at the values assigned for each by using <code>row.names</code> and <code>col.names</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(metadata)
-<span class="kw">colnames</span>(metadata)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rownames</span>(metadata)
+<span class="kw">colnames</span>(metadata)</code></pre></div>
 <div id="challenge" class="challenge">
 <h3>Challenge</h3>
 <p>We can change the default settings by adding in arguments when we read in the data by setting <code>header = FALSE</code>. Check to see how the dataframe has changed. What happens if we load in data using <code>read.table</code>?</p>
 </div>
 <p><strong>Load the data in again using default settings and <code>read.csv</code> to continue.</strong></p>
 <p>Suppose we had a larger file, we might not want to display all the contents in the console. Instead we could check the top (the first 6 lines) of this <code>data.frame</code> using the function <code>head()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(metadata)</code></pre>
-<p>Let's now check the <strong>str</strong>ucture of this <code>data.frame</code> in more details with the function <code>str()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(metadata)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(metadata)</code></pre></div>
+<p>Let's now check the __str__ucture of this <code>data.frame</code> in more details with the function <code>str()</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(metadata)</code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    12 obs. of  3 variables:
 ##  $ genotype : Factor w/ 2 levels &quot;KO&quot;,&quot;Wt&quot;: 2 2 2 1 1 1 2 2 2 1 ...
 ##  $ celltype : Factor w/ 2 levels &quot;typeA&quot;,&quot;typeB&quot;: 1 1 1 1 1 1 2 2 2 2 ...
@@ -85,7 +85,7 @@
 <ul>
 <li>Size:
 <ul>
-<li><code>dim()</code> - returns a vector with the number of rows in the first element, and the number of columns as the second element (the <strong>dim</strong>ensions of the object)</li>
+<li><code>dim()</code> - returns a vector with the number of rows in the first element, and the number of columns as the second element (the __dim__ensions of the object)</li>
 <li><code>nrow()</code> - returns the number of rows</li>
 <li><code>ncol()</code> - returns the number of columns</li>
 </ul></li>
@@ -117,31 +117,31 @@
 <p>Factors are used to represent categorical data. Factors can be ordered or unordered and are an important class for statistical analysis and for plotting.</p>
 <p>Factors are stored as integers, and have labels associated with these unique integers. While factors look (and often behave) like character vectors, they are actually integers under the hood, and you need to be careful when treating them like strings.</p>
 <p>Once created, factors can only contain a pre-defined set values, known as <em>levels</em>. By default, R always sorts <em>levels</em> in alphabetical order. For instance, if you have a factor with 2 levels:</p>
-<pre class="sourceCode r"><code class="sourceCode r">sex &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;male&quot;</span>))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sex &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;male&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;female&quot;</span>, <span class="st">&quot;male&quot;</span>))</code></pre></div>
 <p>R will assign <code>1</code> to the level <code>&quot;female&quot;</code> and <code>2</code> to the level <code>&quot;male&quot;</code> (because <code>f</code> comes before <code>m</code>, even though the first element in this vector is <code>&quot;male&quot;</code>). You can check this by using the function <code>levels()</code>, and check the number of levels using <code>nlevels()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(sex)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(sex)</code></pre></div>
 <pre><code>## [1] &quot;female&quot; &quot;male&quot;</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nlevels</span>(sex)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nlevels</span>(sex)</code></pre></div>
 <pre><code>## [1] 2</code></pre>
 <p>Sometimes, the order of the factors does not matter, other times you might want to specify the order because it is meaningful (e.g., &quot;low&quot;, &quot;medium&quot;, &quot;high&quot;) or it is required by particular type of analysis. For example, in this case you might want the &quot;low&quot; group to be your base level. That is, we are only interested in changes relative to &quot;low&quot;.</p>
-<pre class="sourceCode r"><code class="sourceCode r">food &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">food &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>, <span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
 
-<span class="kw">relevel</span>(food, <span class="dt">ref=</span><span class="st">&quot;low&quot;</span>) <span class="co"># set base level</span></code></pre>
+<span class="kw">relevel</span>(food, <span class="dt">ref=</span><span class="st">&quot;low&quot;</span>) <span class="co"># set base level</span></code></pre></div>
 <p>Additionally, specifying the order of the levels allows to compare levels:</p>
-<pre class="sourceCode r"><code class="sourceCode r">food &lt;-<span class="st"> </span><span class="kw">factor</span>(food, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">food &lt;-<span class="st"> </span><span class="kw">factor</span>(food, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>))
 <span class="kw">levels</span>(food)
 <span class="kw">min</span>(food) ## doesn&#39;t work
 food &lt;-<span class="st"> </span><span class="kw">factor</span>(food, <span class="dt">levels=</span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;high&quot;</span>), <span class="dt">ordered=</span><span class="ot">TRUE</span>)
 <span class="kw">levels</span>(food)
-<span class="kw">min</span>(food) ## works!</code></pre>
+<span class="kw">min</span>(food) ## works!</code></pre></div>
 <p>In R's memory, these factors are represented by numbers (1, 2, 3). They are better than using simple integer labels because factors are self describing: <code>&quot;low&quot;</code>, <code>&quot;medium&quot;</code>, and <code>&quot;high&quot;</code>&quot; is more descriptive than <code>1</code>, <code>2</code>, <code>3</code>. Which is low? You wouldn't be able to tell with just integer data. Factors have this information built in. It is particularly helpful when there are many levels.</p>
 <h3 id="converting-factors">Converting factors</h3>
 <p>If you need to convert a factor to a character vector, simply use <code>as.character(x)</code>.</p>
 <p>Converting a factor to a numeric vector is however a little trickier, and you have to go via a character vector. Compare:</p>
-<pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">2</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">2</span>))
 <span class="kw">as.numeric</span>(f)               ## wrong! and there is no warning...
 <span class="kw">as.numeric</span>(<span class="kw">as.character</span>(f)) ## works...
-<span class="kw">as.numeric</span>(<span class="kw">levels</span>(f))[f]    ## The recommended way.</code></pre>
+<span class="kw">as.numeric</span>(<span class="kw">levels</span>(f))[f]    ## The recommended way.</code></pre></div>
         </div>
       </div>
       <div class="footer">

@@ -40,10 +40,10 @@
 <p><code>&lt;-</code> is the assignment operator; it is like an arrow that points from the value to the object assigning values on the right to objects on the left. Mostly similar to <code>=</code> but not always. Learn to use <code>&lt;-</code> as it is good programming practice. Using <code>=</code> in place of <code>&lt;-</code> can lead to issues down the line.</p>
 <p><em>Shortcut</em>, typing <code>Alt + -</code> (push <code>Alt</code>, the key next to your space bar at the same time as the <code>-</code> key) will write <code>&lt;-</code> in a single keystroke.</p>
 <p>You can get output from R simply by typing in math in the console</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span>
-<span class="dv">12</span>/<span class="dv">7</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span>
+<span class="dv">12</span>/<span class="dv">7</span></code></pre></div>
 <p>However, to do useful and interesting things, we need to <strong>assign values to objects</strong>. To create objects, we need to give it a name followed by the assignment operator <code>&lt;-</code> and the value we want to give it:</p>
-<pre class="sourceCode r"><code class="sourceCode r">weight_kg &lt;-<span class="st"> </span><span class="dv">55</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weight_kg &lt;-<span class="st"> </span><span class="dv">55</span></code></pre></div>
 <h3 id="naming-variables">Naming variables</h3>
 <ul>
 <li>Objects can be given any name such as <code>x</code>, <code>current_temperature</code>, or <code>subject_id</code>. You want your object names to be explicit and not too long.</li>
@@ -54,54 +54,54 @@
 <li>It's also best to avoid dots (<code>.</code>) within a variable name as in <code>my.dataset</code></li>
 </ul>
 <p>When assigning a value to an object, R does not print anything. You can force it to print the value by using parentheses or by typing the name:</p>
-<pre class="sourceCode r"><code class="sourceCode r">(weight_kg &lt;-<span class="st"> </span><span class="dv">55</span>)
-weight_kg</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(weight_kg &lt;-<span class="st"> </span><span class="dv">55</span>)
+weight_kg</code></pre></div>
 <p>Now that R has <code>weight_kg</code> in memory, we can do arithmetic with it. For instance, we may want to convert this weight in pounds (weight in pounds is 2.2 times the weight in kg):</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="fl">2.2</span> *<span class="st"> </span>weight_kg</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fl">2.2</span> *<span class="st"> </span>weight_kg</code></pre></div>
 <p>We can also change a variable's value by assigning it a new one:</p>
-<pre class="sourceCode r"><code class="sourceCode r">weight_kg &lt;-<span class="st"> </span><span class="fl">57.5</span>
-<span class="fl">2.2</span> *<span class="st"> </span>weight_kg</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weight_kg &lt;-<span class="st"> </span><span class="fl">57.5</span>
+<span class="fl">2.2</span> *<span class="st"> </span>weight_kg</code></pre></div>
 <pre><code>## [1] 126.5</code></pre>
 <p>This means that assigning a value to one variable does not change the values of other variables. For example, let's store the animal's weight in pounds in a variable.</p>
-<pre class="sourceCode r"><code class="sourceCode r">weight_lb &lt;-<span class="st"> </span><span class="fl">2.2</span> *<span class="st"> </span>weight_kg</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weight_lb &lt;-<span class="st"> </span><span class="fl">2.2</span> *<span class="st"> </span>weight_kg</code></pre></div>
 <p>and then change <code>weight_kg</code> to 100.</p>
-<pre class="sourceCode r"><code class="sourceCode r">weight_kg &lt;-<span class="st"> </span><span class="dv">100</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weight_kg &lt;-<span class="st"> </span><span class="dv">100</span></code></pre></div>
 <p>What do you think is the current content of the object <code>weight_lb</code>? 121 or 220?</p>
 <p><em>Note: When typing out a variable that is stored try pressing the <code>Tab</code> key after typing only <code>weight</code>. You will find that RStudio will tab-complete the variable name.</em></p>
 <div id="challenge" class="challenge">
 <h3>Challenge</h3>
 <p>What are the values after each statement in the following?</p>
 </div>
-<pre class="sourceCode r"><code class="sourceCode r">mass &lt;-<span class="st"> </span><span class="fl">47.5</span>           <span class="co"># mass?</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mass &lt;-<span class="st"> </span><span class="fl">47.5</span>           <span class="co"># mass?</span>
 age  &lt;-<span class="st"> </span><span class="dv">122</span>            <span class="co"># age?</span>
 mass &lt;-<span class="st"> </span>mass *<span class="st"> </span><span class="fl">2.0</span>     <span class="co"># mass?</span>
 age  &lt;-<span class="st"> </span>age -<span class="st"> </span><span class="dv">20</span>       <span class="co"># age?</span>
-massIndex &lt;-<span class="st"> </span>mass/age  <span class="co"># massIndex?</span></code></pre>
+massIndex &lt;-<span class="st"> </span>mass/age  <span class="co"># massIndex?</span></code></pre></div>
 <h2 id="vectors-and-data-types">Vectors and data types</h2>
 <p>A vector is the most common and basic data structure in R, and is pretty much the workhorse of R. It's a group of values, mainly either numbers or characters (or can be both). You can assign this list of values to a variable, just like you would for one item. For example we can create a vector of animal weights:</p>
-<pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">65</span>, <span class="dv">82</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">65</span>, <span class="dv">82</span>)</code></pre></div>
 <p>A vector can also contain characters:</p>
-<pre class="sourceCode r"><code class="sourceCode r">animals &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mouse&quot;</span>, <span class="st">&quot;rat&quot;</span>, <span class="st">&quot;dog&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">animals &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mouse&quot;</span>, <span class="st">&quot;rat&quot;</span>, <span class="st">&quot;dog&quot;</span>)</code></pre></div>
 <p>Alternatively a vector can contain both:</p>
-<pre class="sourceCode r"><code class="sourceCode r">scores &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="dv">80</span>, <span class="dv">60</span>, <span class="dv">20</span>)
-scores</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scores &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="dv">80</span>, <span class="dv">60</span>, <span class="dv">20</span>)
+scores</code></pre></div>
 <p>There are many functions that allow you to inspect the content of a vector. <code>length()</code> tells you how many elements are in a particular vector:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(weights)
-<span class="kw">length</span>(animals)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(weights)
+<span class="kw">length</span>(animals)</code></pre></div>
 <p><code>class()</code> indicates the class (the type of element) of an object:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(weights)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(weights)</code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(animals)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(animals)</code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <p>The function <code>str()</code> provides an overview of the object and the elements it contains. It is a really useful function when working with large and complex objects:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(weights)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(weights)</code></pre></div>
 <pre><code>##  num [1:4] 50 60 65 82</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(animals)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(animals)</code></pre></div>
 <pre><code>##  chr [1:3] &quot;mouse&quot; &quot;rat&quot; &quot;dog&quot;</code></pre>
 <p>You can add elements to your vector simply by using the concatenate function denoted by <code>c()</code> function:</p>
-<pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">c</span>(weights, <span class="dv">90</span>) <span class="co"># adding at the end</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">c</span>(weights, <span class="dv">90</span>) <span class="co"># adding at the end</span>
 weights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">30</span>, weights) <span class="co"># adding at the beginning</span>
-weights</code></pre>
+weights</code></pre></div>
 <pre><code>## [1] 30 50 60 65 82 90</code></pre>
 <p>What happens here is that we take the original vector <code>weights</code>, and we are adding another item first to the end of the other ones, and then another item at the beginning. We can do this over and over again to build a vector or a dataset. As we program, this may be useful to autoupdate results that we are collecting or calculating.</p>
 <p>We just saw 2 of the 6 <strong>data types</strong> that R uses: <code>&quot;character&quot;</code> and <code>&quot;numeric&quot;</code>. The other 4 are:</p>
@@ -121,31 +121,31 @@ weights</code></pre>
 <p>Let's look at a more advanced function call below <code>read.csv</code>. This function is used to read in data from a csv (comma separated values) file. There are numerous other functions to load in data depending on your filetype, we will discuss this in detail in the next section.</p>
 <p><em>Note: When typing out read.csv try pressing the <code>Tab</code> key after typing only <code>read</code>. You will find that a drop-down menu will appear listing all <code>read</code> options for loading in files. The window to the right gives you more information on the function and its arguments as you scroll down and highlight each individually.</em></p>
 <p><strong>Why does this not work?</strong></p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&#39;mouse_exp_design.csv&#39;</span>) <span class="co"># do not assign it to a variable yet</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&#39;mouse_exp_design.csv&#39;</span>) <span class="co"># do not assign it to a variable yet</span></code></pre></div>
 <pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;mouse_exp_design.csv&#39;: No
 ## such file or directory</code></pre>
 <pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection</code></pre>
 <p>We need to make sure that the path to our file is correct. First check what our working directory is, then set the path accordingly.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()
-<span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta//mouse_exp_design.csv&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()
+<span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta//mouse_exp_design.csv&quot;</span>)</code></pre></div>
 <p>The <code>file=</code> part inside the parentheses is called an <strong>argument</strong>, and most functions use arguments. Arguments modify the behavior of the function. Typically, they take some input (e.g., some data, an object) and other options to change what the function will return, or how to treat the data provided. Simple functions like the function <code>length</code> don't need additional modifications. It will take input (i.e. vector), process it (i.e. count the number of elements) and return value.</p>
 <p>Most functions can take several arguments, but most are specified by default so you don't have to enter them. To see these default values, you can either type <code>args(read.csv)</code> or look at the help for this function (e.g., <code>?read.csv</code>).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">args</span>(read.csv)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">args</span>(read.csv)</code></pre></div>
 <pre><code>## function (file, header = TRUE, sep = &quot;,&quot;, quote = &quot;\&quot;&quot;, dec = &quot;.&quot;, 
 ##     fill = TRUE, comment.char = &quot;&quot;, ...) 
 ## NULL</code></pre>
 <p>If you provide the arguments in the exact same order as they are defined you don't have to name them:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
-<span class="kw">read.csv</span>(<span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
+<span class="kw">read.csv</span>(<span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="ot">TRUE</span>)</code></pre></div>
 <p>However, it's usually not recommended practice because it's a lot of remembering to do, and if you share your code with others that includes less known functions it makes your code difficult to read. If you include names <strong>do not use the assignment operator</strong>. A <code>=</code> should be used to specify the values of arguments in functions. (It's however OK to not include the names of the arguments for basic functions like <code>mean</code>, <code>min</code>, etc...)</p>
 <p>Another advantage of naming arguments, is that the order doesn't matter:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
-<span class="kw">read.csv</span>(<span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
+<span class="kw">read.csv</span>(<span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>)</code></pre></div>
 <h2 id="packages-and-libraries">Packages and Libraries</h2>
 <p><strong>Packages</strong> are collections of R functions, data, and compiled code in a well-defined format. The directory where packages are stored is called the <strong>library</strong>. The two terms are sometimes used synonomously and there has been <a href="http://www.r-bloggers.com/packages-v-libraries-in-r/">discussion</a> amongst the community to resolve this. It is somewhat counter-intuitive to <em>load a package</em> using the <code>library()</code> function and so you can see how confusion can arise.</p>
 <p>There are a set of <strong>standard (or base) packages</strong> which are considered part of the R source code and automatically available as part of your R installation. Base packages contain the basic functions that allow R to work, and enable standard statistical and graphical functions on datasets; for example all of the functions that we have been using so far in our examples.</p>
 <p>You can check what base packages are loaded by typing into the console:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()
 
 R version <span class="fl">3.1.2</span> (<span class="dv">2014-10-31</span>)
 Platform:<span class="st"> </span>x86_64-pc-linux-<span class="kw">gnu</span> (<span class="dv">64</span>-bit)
@@ -156,17 +156,17 @@ locale:
 [<span class="dv">11</span>] LC_MEASUREMENT=en_US.UTF<span class="dv">-8</span> LC_IDENTIFICATION=C       
 
 attached base packages:
-[<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base    </code></pre>
+[<span class="dv">1</span>] stats     graphics  grDevices utils     datasets  methods   base    </code></pre></div>
 <p>In this course we will mostly be using functions from the standard base packages. However, the more you work with R you will come to realize that there is a cornucopia of R packages that offer a wide variety of functionality. To use additional packages will require installation. Packages for R can be installed from the <a href="http://cran.r-project.org/">CRAN</a> package repository. An example is given below as we install the <code>gplots</code> package required for some images we will create later on.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;gplots&#39;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&#39;gplots&#39;</span>)</code></pre></div>
 <p>Alternatively, packages can also be installed from <a href="">Bioconductor</a> by using the <code>biocLite.R</code> installation script. You will first need to install Bioconductor and all the standard packages (this only needs to be done once ever):</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
-<span class="kw">biocLite</span>()</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;http://bioconductor.org/biocLite.R&quot;</span>)
+<span class="kw">biocLite</span>()</code></pre></div>
 <p>Once you have the standard installed, you can add additional packages using the <code>biocLite.R</code> script. If it's a new R session you will also have to source the script again. Here we will install another package useful for visualization <code>ggplot2</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">biocLite</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">biocLite</span>(<span class="st">&#39;ggplot2&#39;</span>)</code></pre></div>
 <p>Once you have the package installed, you can load it into your R session for use. Note that quotations are not required here.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gplots)
-<span class="kw">library</span>(ggplot2)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gplots)
+<span class="kw">library</span>(ggplot2)</code></pre></div>
         </div>
       </div>
       <div class="footer">
