@@ -121,7 +121,7 @@ plot(samplemeans, pch=8, main="Scatter plot of mean values")
 <img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
 
 ## Barplot
-In the case of our data, a **barplot**  would be much more useful. We can use `barplot` to draw a single bar representing each sample and the height indicates the average expression level. 
+Another way to display our data is a **barplot**. We can use `barplot` to draw a single bar representing each sample and the height indicates the average expression level. 
 
 
 ```r

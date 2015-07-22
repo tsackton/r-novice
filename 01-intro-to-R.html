@@ -38,7 +38,7 @@
 </div>
 <h2 id="assignment-operator">Assignment operator</h2>
 <p><code>&lt;-</code> is the assignment operator; it is like an arrow that points from the value to the object assigning values on the right to objects on the left. Mostly similar to <code>=</code> but not always. Learn to use <code>&lt;-</code> as it is good programming practice. Using <code>=</code> in place of <code>&lt;-</code> can lead to issues down the line.</p>
-<p><em>Shortcut</em>, typing <code>Alt + -</code> (push <code>Alt</code>, the key next to your space bar at the same time as the <code>-</code> key) will write <code>&lt;-</code> in a single keystroke.</p>
+<p><em>Shortcut</em>: typing <code>Alt + -</code> (push <code>Alt</code>, the key next to your space bar at the same time as the <code>-</code> key) will write <code>&lt;-</code> in a single keystroke.</p>
 <p>You can get output from R simply by typing in math in the console</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">3</span> +<span class="st"> </span><span class="dv">5</span>
 <span class="dv">12</span>/<span class="dv">7</span></code></pre></div>
@@ -51,7 +51,6 @@
 <li>R is case sensitive (e.g., <code>weight_kg</code> is different from <code>Weight_kg</code>).</li>
 <li>There are some names that cannot be used because they are reserved the names of fundamental functions in R (e.g., <code>if</code>, <code>else</code>, <code>for</code>, see <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html">here</a> for a complete list).</li>
 <li>Even if it's allowed, it's best to not use other function names (e.g., <code>c</code>, <code>T</code>, <code>mean</code>, <code>data</code>, <code>df</code>, <code>weights</code>). In doubt check the help to see if the name is already in use.</li>
-<li>It's also best to avoid dots (<code>.</code>) within a variable name as in <code>my.dataset</code></li>
 </ul>
 <p>When assigning a value to an object, R does not print anything. You can force it to print the value by using parentheses or by typing the name:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(weight_kg &lt;-<span class="st"> </span><span class="dv">55</span>)
@@ -66,7 +65,7 @@ weight_kg</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weight_lb &lt;-<span class="st"> </span><span class="fl">2.2</span> *<span class="st"> </span>weight_kg</code></pre></div>
 <p>and then change <code>weight_kg</code> to 100.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weight_kg &lt;-<span class="st"> </span><span class="dv">100</span></code></pre></div>
-<p>What do you think is the current content of the object <code>weight_lb</code>? 121 or 220?</p>
+<p>What do you think is the current content of the object <code>weight_lb</code>? 126.5 or 220?</p>
 <p><em>Note: When typing out a variable that is stored try pressing the <code>Tab</code> key after typing only <code>weight</code>. You will find that RStudio will tab-complete the variable name.</em></p>
 <div id="challenge" class="challenge">
 <h3>Challenge</h3>
@@ -120,27 +119,23 @@ weights</code></pre></div>
 <p>Functions are <strong>&quot;self contained&quot; modules of code that accomplish a specific task</strong>. Functions usually take in data, process it, and return a result. We have already used a few examples of basic functions above i.e <code>length</code>, <code>class</code> and <code>str</code>.</p>
 <p>Let's look at a more advanced function call below <code>read.csv</code>. This function is used to read in data from a csv (comma separated values) file. There are numerous other functions to load in data depending on your filetype, we will discuss this in detail in the next section.</p>
 <p><em>Note: When typing out read.csv try pressing the <code>Tab</code> key after typing only <code>read</code>. You will find that a drop-down menu will appear listing all <code>read</code> options for loading in files. The window to the right gives you more information on the function and its arguments as you scroll down and highlight each individually.</em></p>
-<p><strong>Why does this not work?</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&#39;mouse_exp_design.csv&#39;</span>) <span class="co"># do not assign it to a variable yet</span></code></pre></div>
-<pre><code>## Warning in file(file, &quot;rt&quot;): cannot open file &#39;mouse_exp_design.csv&#39;: No
-## such file or directory</code></pre>
-<pre><code>## Error in file(file, &quot;rt&quot;): cannot open the connection</code></pre>
-<p>We need to make sure that the path to our file is correct. First check what our working directory is, then set the path accordingly.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()
-<span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta//mouse_exp_design.csv&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;http://fasrc.github.io/2015-07-22_SWC-R/class_data/mouse_exp_design.csv&quot;</span>)</code></pre></div>
 <p>The <code>file=</code> part inside the parentheses is called an <strong>argument</strong>, and most functions use arguments. Arguments modify the behavior of the function. Typically, they take some input (e.g., some data, an object) and other options to change what the function will return, or how to treat the data provided. Simple functions like the function <code>length</code> don't need additional modifications. It will take input (i.e. vector), process it (i.e. count the number of elements) and return value.</p>
+<p>Note that arguments can take objects as values, like so:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mouse_exp_design&lt;-<span class="kw">c</span>(<span class="st">&quot;http://fasrc.github.io/2015-07-22_SWC-R/class_data/mouse_exp_design.csv&quot;</span>)
+<span class="kw">read.csv</span>(<span class="dt">file=</span>mouse_exp_design)</code></pre></div>
 <p>Most functions can take several arguments, but most are specified by default so you don't have to enter them. To see these default values, you can either type <code>args(read.csv)</code> or look at the help for this function (e.g., <code>?read.csv</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">args</span>(read.csv)</code></pre></div>
 <pre><code>## function (file, header = TRUE, sep = &quot;,&quot;, quote = &quot;\&quot;&quot;, dec = &quot;.&quot;, 
 ##     fill = TRUE, comment.char = &quot;&quot;, ...) 
 ## NULL</code></pre>
 <p>If you provide the arguments in the exact same order as they are defined you don't have to name them:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
-<span class="kw">read.csv</span>(<span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span>mouse_exp_design, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
+<span class="kw">read.csv</span>(mouse_exp_design, <span class="ot">TRUE</span>)</code></pre></div>
 <p>However, it's usually not recommended practice because it's a lot of remembering to do, and if you share your code with others that includes less known functions it makes your code difficult to read. If you include names <strong>do not use the assignment operator</strong>. A <code>=</code> should be used to specify the values of arguments in functions. (It's however OK to not include the names of the arguments for basic functions like <code>mean</code>, <code>min</code>, etc...)</p>
 <p>Another advantage of naming arguments, is that the order doesn't matter:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
-<span class="kw">read.csv</span>(<span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">file=</span><span class="st">&quot;meta/mouse_exp_design.csv&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">read.csv</span>(<span class="dt">file=</span>mouse_exp_design, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="co"># is identical to:</span>
+<span class="kw">read.csv</span>(<span class="dt">header=</span><span class="ot">TRUE</span>, <span class="dt">file=</span>mouse_exp_design)</code></pre></div>
 <h2 id="packages-and-libraries">Packages and Libraries</h2>
 <p><strong>Packages</strong> are collections of R functions, data, and compiled code in a well-defined format. The directory where packages are stored is called the <strong>library</strong>. The two terms are sometimes used synonomously and there has been <a href="http://www.r-bloggers.com/packages-v-libraries-in-r/">discussion</a> amongst the community to resolve this. It is somewhat counter-intuitive to <em>load a package</em> using the <code>library()</code> function and so you can see how confusion can arise.</p>
 <p>There are a set of <strong>standard (or base) packages</strong> which are considered part of the R source code and automatically available as part of your R installation. Base packages contain the basic functions that allow R to work, and enable standard statistical and graphical functions on datasets; for example all of the functions that we have been using so far in our examples.</p>

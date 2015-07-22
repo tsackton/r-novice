@@ -44,7 +44,7 @@ file. Using the same command function as our previous session, but **this time w
 
 
 ```r
-metadata <- read.csv(file='meta/mouse_exp_design.csv')
+metadata <- read.csv(file="http://fasrc.github.io/2015-07-22_SWC-R/class_data/mouse_exp_design.csv")
 ```
 
 This statement doesn't produce any output because assignment doesn't display

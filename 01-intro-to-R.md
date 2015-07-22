@@ -20,7 +20,7 @@ minutes: 45
 
 `<-` is the assignment operator; it is like an arrow that points from the value to the object assigning values on the right to objects on the left. Mostly similar to `=` but not always. Learn to use `<-` as it is good programming practice. Using `=` in place of `<-` can lead to issues down the line.
 
-_Shortcut_, typing `Alt + -` (push `Alt`, the key next to your space bar at the same time as the `-` key) will write ` <- ` in a single keystroke.
+_Shortcut_: typing `Alt + -` (push `Alt`, the key next to your space bar at the same time as the `-` key) will write ` <- ` in a single keystroke.
 
 
 You can get output from R simply by typing in math in the console
@@ -47,7 +47,6 @@ weight_kg <- 55
 (e.g., `if`, `else`, `for`, see [here](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html)
 for a complete list). 
 * Even if it's allowed, it's best to not use other function names (e.g., `c`, `T`, `mean`, `data`, `df`, `weights`). In doubt check the help to see if the name is already in use. 
-* It's also best to avoid dots (`.`) within a variable name as in `my.dataset`
 
 When assigning a value to an object, R does not print anything. You can force it to
 print the value by using parentheses or by typing the name:
@@ -95,7 +94,7 @@ and then change `weight_kg` to 100.
 ```r
 weight_kg <- 100
 ```
-What do you think is the current content of the object `weight_lb`? 121 or 220?
+What do you think is the current content of the object `weight_lb`? 126.5 or 220?
 
 _Note: When typing out a variable that is stored try pressing the `Tab` key after typing only `weight`. You will find that RStudio will tab-complete the variable name._ 
 
@@ -230,31 +229,22 @@ Let's look at a more advanced function call below `read.csv`. This function is u
 
 _Note: When typing out read.csv try pressing the `Tab` key after typing only `read`. You will find that a drop-down menu will appear listing all `read` options for loading in files. The window to the right gives you more information on the function and its arguments as you scroll down and highlight each individually._ 
 
-**Why does this not work?**
-
-```r
-read.csv(file='mouse_exp_design.csv') # do not assign it to a variable yet
-```
-
-```
-## Warning in file(file, "rt"): cannot open file 'mouse_exp_design.csv': No
-## such file or directory
-```
-
-```
-## Error in file(file, "rt"): cannot open the connection
-```
-
-We need to make sure that the path to our file is correct. First check what our working directory is, then set the path accordingly.
 
 
 ```r
-getwd()
-read.csv(file="meta//mouse_exp_design.csv")
+read.csv(file="http://fasrc.github.io/2015-07-22_SWC-R/class_data/mouse_exp_design.csv")
 ```
 
 The `file=` part inside the parentheses is called an **argument**, and most functions use arguments. Arguments modify the behavior of the function. Typically, they take some input (e.g., some data, an object) and other
 options to change what the function will return, or how to treat the data provided. Simple functions like the function `length` don't need additional modifications. It will take input (i.e. vector), process it (i.e. count the number of elements) and return value.
+
+Note that arguments can take objects as values, like so:
+
+
+```r
+mouse_exp_design<-c("http://fasrc.github.io/2015-07-22_SWC-R/class_data/mouse_exp_design.csv")
+read.csv(file=mouse_exp_design)
+```
 
 Most functions can take several arguments, but most are specified by default so you don't have to enter them. To see these default values, you can either type `args(read.csv)` or look at the help for this function (e.g., `?read.csv`).
 
@@ -274,8 +264,8 @@ don't have to name them:
 
 
 ```r
-read.csv(file="meta/mouse_exp_design.csv", header=TRUE) # is identical to:
-read.csv("meta/mouse_exp_design.csv", TRUE)
+read.csv(file=mouse_exp_design, header=TRUE) # is identical to:
+read.csv(mouse_exp_design, TRUE)
 ```
 
 However, it's usually not recommended practice because it's a lot of remembering
@@ -287,8 +277,8 @@ Another advantage of naming arguments, is that the order doesn't matter:
 
 
 ```r
-read.csv(file="meta/mouse_exp_design.csv", header=TRUE) # is identical to:
-read.csv(header=TRUE, file="meta/mouse_exp_design.csv")
+read.csv(file=mouse_exp_design, header=TRUE) # is identical to:
+read.csv(header=TRUE, file=mouse_exp_design)
 ```
 
 ## Packages and Libraries

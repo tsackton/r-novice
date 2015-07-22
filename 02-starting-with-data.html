@@ -46,7 +46,7 @@
 <h1 id="loading-in-files">Loading in files</h1>
 <p>We are studying two different celltypes in mice and want to evaluate how gene expression differs in WT versus Knockout (KO). The experimental design setup is stored as a <code>.csv</code> file: each row holds information for a single animal, and the columns represent <code>genotype</code>(WT or KO), <code>celltype</code> (typeA or typeB), and <code>replicate number</code>.</p>
 <p>To load in our metadata, we need to locate the <code>mouse_exp_design.csv</code> file. We will use <code>read.csv()</code> to load into memory (as a <code>data.frame</code>) the content of the CSV file. Using the same command function as our previous session, but <strong>this time we will assign it to a variable</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&#39;meta/mouse_exp_design.csv&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file=</span><span class="st">&quot;http://fasrc.github.io/2015-07-22_SWC-R/class_data/mouse_exp_design.csv&quot;</span>)</code></pre></div>
 <p>This statement doesn't produce any output because assignment doesn't display anything. If we want to check that our data has been loaded, we can print the variable's value:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">metadata</code></pre></div>
 <pre><code>##          genotype celltype replicate

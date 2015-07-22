@@ -43,7 +43,7 @@ To load in our metadata, we need to locate the `mouse_exp_design.csv` file. We w
 file. Using the same command function as our previous session, but **this time we will assign it to a variable**.
 
 ```{r, error=FALSE,warning=FALSE}
-metadata <- read.csv(file='meta/mouse_exp_design.csv')
+metadata <- read.csv(file="http://fasrc.github.io/2015-07-22_SWC-R/class_data/mouse_exp_design.csv")
 ```
 
 This statement doesn't produce any output because assignment doesn't display

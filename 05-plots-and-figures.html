@@ -83,7 +83,7 @@ df &lt;-<span class="st"> </span><span class="kw">cbind</span>(metadata, samplem
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(samplemeans, <span class="dt">pch=</span><span class="dv">8</span>, <span class="dt">main=</span><span class="st">&quot;Scatter plot of mean values&quot;</span>)</code></pre></div>
 <p><img src="figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" /></p>
 <h2 id="barplot">Barplot</h2>
-<p>In the case of our data, a <strong>barplot</strong> would be much more useful. We can use <code>barplot</code> to draw a single bar representing each sample and the height indicates the average expression level.</p>
+<p>Another way to display our data is a <strong>barplot</strong>. We can use <code>barplot</code> to draw a single bar representing each sample and the height indicates the average expression level.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(samplemeans)</code></pre></div>
 <p><img src="figure/unnamed-chunk-10-1.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" /></p>
 <p>The sample names appear to be too large for the plot, we can change that by changing the <code>cex.names</code> value.</p>

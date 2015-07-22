@@ -16,8 +16,9 @@ minutes: 15
 
 # Before we get started
 
+* Create a new directory to be your 'working directory' for this lesson, anywhere you like on your laptop
 * Start RStudio 
-* Create a new directory to be your 'working directory' via Session --> Set Working Directory --> Choose Directory
+* Set the working directory via Session --> Set Working Directory --> Choose Directory
 * Check your working directory using `getwd()`
 * Create a new R script (File --> New File --> R script) and save it in your working
   directory (e.g. `softwarecarpentry-script.R`)

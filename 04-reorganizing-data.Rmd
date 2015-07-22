@@ -23,7 +23,7 @@ array, using the `subset()` function. For instance, if we just want to look at
 the samples of a specific celltype "typeA":
 
 ```{r setup, echo=FALSE}
-metadata <- read.csv(file='meta/mouse_exp_design.csv')
+metadata <- read.csv(file=mouse_exp_design.csv)
 ```
 
 ```{r}
@@ -48,7 +48,7 @@ subset(metadata, replicate < 3, select = c('genotype', 'celltype'))
 Let's bring in our data matrix. The experimental design file is associated with RNA-Seq data. From the experiment we have three different data files that have been generated which can be found in the `/data` directory. We will be using the RPKM data for now. Load in this file similar to how we did for our metadata file.
 
 ```{r, echo=TRUE}
-rpkm_data <- read.csv("data/counts.rpkm")
+rpkm_data <- read.csv("http://fasrc.github.io/2015-07-22_SWC-R/class_data/counts.rpkm")
 ```
 
 Take a look at the first few lines of the data matrix to see what's in there.
@@ -115,7 +115,7 @@ all(A == B)
 The column names in our data matrix are all contained in the row names of our metadata, but they appear to be out of order. We can use the `match()` function to create a new data matrix such that samples are in the same order. The function `match()` takes at least 2 arguments: the values to be matched (in our case the row names `metadata`), and the table that contains the values to be matched against (in our case the column names of `data`. The function returns the position of the matches in the table, and this can be used to data columns. For values that don't match you can specify what values you would have it assigned using `nomatch` argument (by default this is NA).
 
 
-```{r}
+```{r, eval=FALSE}
 # Retrieve a vector of indices where the column names are reordered to match the row names 
 m <- match(row.names(metadata), colnames(rpkm_data))
 
@@ -140,10 +140,10 @@ new variable. You can add columns to a `data.frame` using the function `cbind()`
 (__c__olumn __bind__). Beware, the additional column must have the same number
 of elements as there are rows in the `data.frame`.
 
-The data matrix we are working with has Ensembl IDs as the identifier, however it would also be nice to know the official gene symbols assocated with those IDs. The gene annotation was only provided for the counts file (`data/annotated_combined.counts`) but not the RPKM data. We need to take the gene symbols from the counts file and add it as a column in our data matrix. 
+The data matrix we are working with has Ensembl IDs as the identifier, however it would also be nice to know the official gene symbols assocated with those IDs. The gene annotation was only provided for the counts file (`annotated_combined.counts`) but not the RPKM data. We need to take the gene symbols from the counts file and add it as a column in our data matrix. 
 
 ```{r}
-counts <- read.csv('data/annotated_combined.counts')
+counts <- read.csv("http://fasrc.github.io/2015-07-22_SWC-R/class_data/annotated_combined.counts")
 ```
 
 
@@ -154,7 +154,7 @@ counts <- read.csv('data/annotated_combined.counts')
 > 2. the order of Ensemble Ids is the same in both data frames
 > 3. subset such that you have two data files that have matching row names
 
-```{r, echo=FALSE, results='hide', warning=FALSE,error=FALSE, message=FALSE}
+```{r, echo=FALSE, results='hide', warning=FALSE,error=FALSE, message=FALSE,eval=FALSE}
 
 # Answer to exercise
 head(counts) # take a peek inside
@@ -190,7 +190,7 @@ Similar to `cbind()` for columns, there is a function `rbind()` (__r__ow__bind__
 > Use the code provided below to generate a dataframe `df1` of coloured blocks. Given the dataframe, try the following tasks:
 >
 > 1. The length and width of the blocks are provided, can you add a column to include the following height values: `20, 20, 30`?
-> 2. We have information for an additional block that is yellow, except we don't have height for information (height =20; width= 15). Can you still add the yellow block in as an additional row?
+> 2. We have information for an additional block that is yellow, except we don't have length for information (height =20; width= 15). Can you still add the yellow block in as an additional row?
 
 ```{r}
 df1 <- data.frame(color=c("red", "green", "blue"), length=c(15,20,26), width=c(20,25,35))
@@ -211,6 +211,6 @@ rbind(df1, yellow)
 Although we have the annotated RPKM data matrix stored in memory, it would be quite useful for future analyses. We can export it to file using the `write.csv` command, including arguments for the filename (be sure to add on the correct path so it gets exported to your `data` directory). There are a numberof different options for data output (and input) and we will cover that in more depth in the last section of the R session.
 
 ```{r, eval=FALSE}
-write.csv(annotated_rpkm, file="data/annotated_rpkm", quote=F)
+write.csv(annotated_rpkm, file="annotated_rpkm", quote=F)
 ```
 

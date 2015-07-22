@@ -23,6 +23,9 @@ array, using the `subset()` function. For instance, if we just want to look at
 the samples of a specific celltype "typeA":
 
 
+```
+## Error in read.table(file = file, header = header, sep = sep, quote = quote, : object 'mouse_exp_design.csv' not found
+```
 
 
 ```r
@@ -30,13 +33,7 @@ subset(metadata, celltype == "typeA")
 ```
 
 ```
-##         genotype celltype replicate
-## sample1       Wt    typeA         1
-## sample2       Wt    typeA         2
-## sample3       Wt    typeA         3
-## sample4       KO    typeA         1
-## sample5       KO    typeA         2
-## sample6       KO    typeA         3
+## Error in subset(metadata, celltype == "typeA"): object 'metadata' not found
 ```
 
 We can also subset using other [logical operators](http://www.statmethods.net/management/operators.html) in R. For example suppose we wanted to subset to keep only the **WT samples** from the **typeA cells**.
@@ -47,10 +44,7 @@ subset(metadata, celltype == "typeA" & genotype == "Wt")
 ```
 
 ```
-##         genotype celltype replicate
-## sample1       Wt    typeA         1
-## sample2       Wt    typeA         2
-## sample3       Wt    typeA         3
+## Error in subset(metadata, celltype == "typeA" & genotype == "Wt"): object 'metadata' not found
 ```
 
 Alternatively, we could try looking at only the first two replicates of each sample set. Here, we can use the less than operator since replicate is currently a numeric vector. Adding in the argument select allows us to specify which columns to keep. Which columns are left?
@@ -66,7 +60,7 @@ Let's bring in our data matrix. The experimental design file is associated with 
 
 
 ```r
-rpkm_data <- read.csv("data/counts.rpkm")
+rpkm_data <- read.csv("http://fasrc.github.io/2015-07-22_SWC-R/class_data/counts.rpkm")
 ```
 
 Take a look at the first few lines of the data matrix to see what's in there.
@@ -175,11 +169,11 @@ new variable. You can add columns to a `data.frame` using the function `cbind()`
 (__c__olumn __bind__). Beware, the additional column must have the same number
 of elements as there are rows in the `data.frame`.
 
-The data matrix we are working with has Ensembl IDs as the identifier, however it would also be nice to know the official gene symbols assocated with those IDs. The gene annotation was only provided for the counts file (`data/annotated_combined.counts`) but not the RPKM data. We need to take the gene symbols from the counts file and add it as a column in our data matrix. 
+The data matrix we are working with has Ensembl IDs as the identifier, however it would also be nice to know the official gene symbols assocated with those IDs. The gene annotation was only provided for the counts file (`annotated_combined.counts`) but not the RPKM data. We need to take the gene symbols from the counts file and add it as a column in our data matrix. 
 
 
 ```r
-counts <- read.csv('data/annotated_combined.counts')
+counts <- read.csv("http://fasrc.github.io/2015-07-22_SWC-R/class_data/annotated_combined.counts")
 ```
 
 
@@ -195,6 +189,9 @@ counts <- read.csv('data/annotated_combined.counts')
 Now, we should have two data files of the same dimensions. The column of interest from our counts file (gene symbols) can be cut and paste onto our data file using `cbind` (__c__olumn__bind__) function to add columns. The number of rows needs to be identical between the two objects.
 
 
+```
+## Error in cbind(genesymbol = match_counts$genesymbol, data_ordered): object 'match_counts' not found
+```
 
 Suppose we wanted to remove the column, just like you can select columns by their positions in the `data.frame` or by their names you can also remove. The only difference is that we would use a minus sign to indicate the column number we wish to remove `annot_data[,-1]` or specify the column by name `annot_data[,-genesymbol]`. Note that the column names should not be quoted
 
@@ -205,7 +202,7 @@ Similar to `cbind()` for columns, there is a function `rbind()` (__r__ow__bind__
 > Use the code provided below to generate a dataframe `df1` of coloured blocks. Given the dataframe, try the following tasks:
 >
 > 1. The length and width of the blocks are provided, can you add a column to include the following height values: `20, 20, 30`?
-> 2. We have information for an additional block that is yellow, except we don't have height for information (height =20; width= 15). Can you still add the yellow block in as an additional row?
+> 2. We have information for an additional block that is yellow, except we don't have length for information (height =20; width= 15). Can you still add the yellow block in as an additional row?
 
 
 ```r
@@ -219,6 +216,6 @@ Although we have the annotated RPKM data matrix stored in memory, it would be qu
 
 
 ```r
-write.csv(annotated_rpkm, file="data/annotated_rpkm", quote=F)
+write.csv(annotated_rpkm, file="annotated_rpkm", quote=F)
 ```
 
